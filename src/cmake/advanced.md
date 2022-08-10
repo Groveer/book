@@ -198,7 +198,7 @@ cmake --build build
 ctest --test-dir build -VV
 ```
 
-## 利用 doxygen 以生成开发文档
+## 利用 doxygen 生成开发文档
 
 为了将文档和代码进行隔离，在项目根目录创建 docs 目录，并在该目录创建 test.dox 文件，关于 dox 文件如何编写，不在本篇文章的范围内，故此不做过多说明。
 
@@ -245,5 +245,42 @@ if (BUILD_DOCS AND DOXYGEN_FOUND)
 endif ()
 ```
 
-看起来这里的变量设置的有点多，其实这些变量在官方文档都有说明，只是在变量前面加上 CMAKE 前缀，就可以被 cmake 识别，官方文档参考这里。
+看起来这里的变量设置的有点多，其实这些变量在官方文档都有说明，只是在变量前面加上 CMAKE 前缀，就可以被 cmake 识别，官方文档参考[这里](https://doxygen.nl/manual/config.html)。
 
+该示例演示了 doxygen 生成 .html 和 .qch 文件，html 不用过多介绍，.qch 其实就是 qtcreator 的帮助文档，只有设置了 DOXYGEN_GENERATE_QHP 变量才会生成 .qch 文件，下面的一些变量其实就是对 qch 的一些配置。
+
+## 配置模板文件
+
+在开发库的过程中，可能会需要预处理一些文件，生成我们想要的目标文件，然后再进行使用或安装，比如配置 .pc 文件以方便库的使用者可以很方便的查找该库。关于 .pc 文件和 pkg-config 的使用，不属于本章的范畴，不做过多讲解。
+
+为了遵循规范，需要将 qtdemo.pc.in 文件新建在 misc 目录中，并写入以下内容：
+```
+Name: @BIN_NAME@
+Description: @CMAKE_PROJECT_DESCRIPTION@
+URL: @CMAKE_PROJECT_HOMEPAGE_URL@
+Version: @PROJECT_VERSION@
+Requires: @PC_REQ_PUBLIC@
+Requires.private: @PC_REQ_PRIVATE@
+Cflags: -I"@CMAKE_INSTALL_FULL_INCLUDEDIR@/@BIN_NAME@"
+Libs: -L"@CMAKE_INSTALL_FULL_LIBDIR@" -l@BIN_NAME@
+Libs.private: -L"@CMAKE_INSTALL_FULL_LIBDIR@" -l@BIN_NAME@ -l@PC_LIBS_PRIVATE@
+```
+
+从中可以看出这就是一个键值对的配置文件，只不过其中的 value 都是使用的 CMakeLists.txt 中的变量。
+
+然后需要在 CMakeLists.txt 文件中添加以下内容：
+```cmake
+configure_file(misc/${BIN_NAME}.pc.in ${BIN_NAME}.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+```
+
+主要就是 configure_file 这个函数，它将指定目录的文件输出到指定目录，其语法为：
+```cmake
+configure_file(<input> <output>
+               [NO_SOURCE_PERMISSIONS | USE_SOURCE_PERMISSIONS |
+                FILE_PERMISSIONS <permissions>...]
+               [COPYONLY] [ESCAPE_QUOTES] [@ONLY]
+               [NEWLINE_STYLE [UNIX|DOS|WIN32|LF|CRLF] ])
+```
+
+在经过编译后，就可以在 build 目录中发现生成了 qtdemo.pc 文件，打开后发现使用 cmake 变量的值都已经被换成实际编译中所获取的值。
