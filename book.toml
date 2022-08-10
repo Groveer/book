@@ -1,6 +1,10 @@
 [book]
 authors = ["guoyao"]
-language = "en"
+language = "cn"
 multilingual = false
 src = "src"
 title = "Book"
+
+[output.html]
+git-repository-url = "https://github.com/Groveer/book"
+
