@@ -418,8 +418,7 @@ install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 <p>从这个简单的例子可以看出，相对于基础用法，我们仅仅是加了一些对于 Qt 的支持，并没有新增很多东西。</p>
 <p>编译此项目的命令：</p>
 <pre><code>cmake -B build -DCMAKE_BUILD_TYPE=Debug
-</code></pre>
-<pre><code>cmake --build build
+cmake --build build
 </code></pre>
 <h2 id="添加单元测试程序"><a class="header" href="#添加单元测试程序">添加单元测试程序</a></h2>
 <p>基于上面的例子，在项目根目录再创建一个文件夹：tests，用于放置单元测试有关的源文件</p>
@@ -483,10 +482,8 @@ endif()
 <p><a href="https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_%3CLANG%3E_COMPILER_ID">这里</a>罗列了一些编译器的ID。</p>
 <p>此时，执行下面的命令就可以编译单元测试并运行单元测试了：</p>
 <pre><code class="language-shell">cmake -B build -DCMAKE_BUILD_TYPE=Debug
-</code></pre>
-<pre><code>cmake --build build
-</code></pre>
-<pre><code>ctest --test-dir build -VV
+cmake --build build
+ctest --test-dir build -VV
 </code></pre>
 <h2 id="利用-doxygen-生成开发文档"><a class="header" href="#利用-doxygen-生成开发文档">利用 doxygen 生成开发文档</a></h2>
 <p>为了将文档和代码进行隔离，在项目根目录创建 docs 目录，并在该目录创建 test.dox 文件，关于 dox 文件如何编写，不在本篇文章的范围内，故此不做过多说明。</p>
