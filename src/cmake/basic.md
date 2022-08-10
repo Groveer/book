@@ -222,7 +222,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 ```
 install 方式安装目标文件或目录到指定的目录，其语法如下：
-```
+```cmake
 install(TARGETS <target>... [...])
 install(IMPORTED_RUNTIME_ARTIFACTS <target>... [...])
 install({FILES | PROGRAMS} <file>... [...])
