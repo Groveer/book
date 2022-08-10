@@ -3,34 +3,33 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Book</title>
-        <meta name="robots" content="noindex" />
+        <title>高级用法 - Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
     </head>
     <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="cmake/index.html"><strong aria-hidden="true">1.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cmake/basic.html"><strong aria-hidden="true">1.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="cmake/advanced.html"><strong aria-hidden="true">1.2.</strong> 高级用法</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="../cmake/index.html"><strong aria-hidden="true">1.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cmake/basic.html"><strong aria-hidden="true">1.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="../cmake/advanced.html" class="active"><strong aria-hidden="true">1.2.</strong> 高级用法</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -108,7 +107,7 @@
                     <h1 class="menu-title">Book</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
                     </div>
@@ -135,95 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="linux-笔记"><a class="header" href="#linux-笔记">Linux 笔记</a></h1>
-<p>欢迎查阅 Linux 笔记，本笔记主要分为三类：</p>
-<ol>
-<li>配置类：各种工具或系统的配置</li>
-<li>开发类：主要有：
-<ol>
-<li>构建工具</li>
-<li>各语言开发：C，C++，Qt等</li>
-</ol>
-</li>
-<li>其他类：杂项。</li>
-</ol>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="cmake"><a class="header" href="#cmake">CMake</a></h1>
-<p>你或许听过好几种 Make 工具，例如 GNU Make，Qt 的 qmake，微软的 MS nmake，BSD Make（pmake），Makepp 等等。这些 Make 工具遵循着不同的规范和标准，所执行的 Makefile 格式也千差万别。这样就带来了一个严峻的问题：如果软件想跨平台，必须保证能够在不同平台的编译。而如果使用上面的 Make 工具，就得为每一种标准写一次 Makefile，这将是一件令人抓狂的工作。</p>
-<p>CMake就是针对上面问题所设计的工具：它首先允许开发者编写一种平台无关的 CMakeLists.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化 Makefile和工程文件，如 Unix 的Makefile 或 Windows 的 Visual Studio工程。从而做到“一次编写，多处运行”。显然，CMake是一个比上述几种 make 更高级的编译配置工具一些使用 CMake 作为项目架构系统的知名开源项目有 VTK、ITK、KDE、OpenCV、OSG 等。</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="基础用法"><a class="header" href="#基础用法">基础用法</a></h1>
-<p>创建 CMake 项目大概需要以下几步：</p>
-<ol>
-<li>首先需要一个目录当中工作空间，也叫项目目录</li>
-<li>在这个目录中有一些 c/cpp 文件需要进行编译和链接</li>
-<li>此时，需要一个 CMakeLists.txt 文件来进行项目管理。</li>
-</ol>
-<p>这里以标准 C 编写一个 demo，打印一下“hello, world！”，编写 main.c 文件，内容为：</p>
-<pre><code class="language-clike">#include &lt;stdio.h&gt;
-
-int main(int argc, char *argv[])
-{
-    printf(&quot;hello, world!&quot;);
-    return 0;
-}
-</code></pre>
-<p>然后在当前目录编写 CMakeLists.txt，内容为：</p>
-<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.13)
-
-# If do't define version number, specify the version number
-if (NOT DEFINED VERSION)
-    set(VERSION &quot;1.0.0&quot;)
-endif()
-
-project(cdemo
-    LANGUAGES C
-    HOMEPAGE_URL https://github.com/Groveer/cdemo
-    DESCRIPTION &quot;c program demo.&quot;
-    VERSION ${VERSION})
-
-include(GNUInstallDirs)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED on)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_C_FLAGS &quot;${CMAKE_C_FLAGS} -fPIC -Wall -Wextra&quot;)
-set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} &quot;-Wl,--as-needed&quot;)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
-
-if (CMAKE_BUILD_TYPE STREQUAL &quot;Debug&quot;)
-    set(CMAKE_C_FLAGS &quot;${CMAKE_C_FLAGS} -O1 -g -fsanitize=address -fno-omit-frame-pointer&quot;)
-else ()
-    set(CMAKE_C_FLAGS &quot;${CMAKE_C_FLAGS} -Ofast&quot;)
-endif ()
-
-find_package(Doxygen)
-#find_package(PkgConfig REQUIRED)
-#pkg_search_module(XCB REQUIRED xcb)
-
-file(GLOB_RECURSE SRCS
-    &quot;*.c&quot;
-)
-
-set(BIN_NAME ${PROJECT_NAME})
-
-add_executable(${BIN_NAME}
-    ${SRCS})
-
-target_compile_definitions(${BIN_NAME} PRIVATE VERSION=&quot;${CMAKE_PROJECT_VERSION}&quot;)
-
-target_include_directories(${BIN_NAME} PUBLIC
-)
-
-target_link_libraries(${BIN_NAME} PRIVATE
-)
-
-install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="高级用法"><a class="header" href="#高级用法">高级用法</a></h1>
+                        <h1 id="高级用法"><a class="header" href="#高级用法">高级用法</a></h1>
 <p>使用 CMake 创建一个简单的基于 Qt 的开发库，并且逐步添加单元测试和文档示例（doxygen）。</p>
 <h2 id="一个简单的基于-qt-的开发库"><a class="header" href="#一个简单的基于-qt-的开发库">一个简单的基于 Qt 的开发库</a></h2>
 <p>首先基于上一章的基础用法创建一个简单的 CMakeLists.txt，并且创建两个目录：include、src，其中include 目录放置 test.h，src 目录放置 test.cpp 文件</p>
@@ -426,12 +337,18 @@ endif ()
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../cmake/basic.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../cmake/basic.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
             </nav>
 
         </div>
@@ -439,18 +356,13 @@ endif ()
         <script type="text/javascript">
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
     </body>
 </html>
