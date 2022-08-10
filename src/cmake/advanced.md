@@ -91,9 +91,6 @@ install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 ```
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
-```
-
-```
 cmake --build build
 ```
 
@@ -188,13 +185,7 @@ endif()
 
 ```shell
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
-```
-
-```
 cmake --build build
-```
-
-```
 ctest --test-dir build -VV
 ```
 
