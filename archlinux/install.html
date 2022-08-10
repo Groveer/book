@@ -1,0 +1,393 @@
+<!DOCTYPE HTML>
+<html lang="cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>系统安装 - Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="../archlinux/index.html"><strong aria-hidden="true">1.</strong> Arch Linux</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../archlinux/install.html" class="active"><strong aria-hidden="true">1.1.</strong> 系统安装</a></li><li class="chapter-item expanded "><a href="../archlinux/config.html"><strong aria-hidden="true">1.2.</strong> 系统配置</a></li><li class="chapter-item expanded "><a href="../archlinux/install-nvidia.html"><strong aria-hidden="true">1.3.</strong> N卡驱动安装</a></li></ol></li><li class="chapter-item expanded "><a href="../cmake/index.html"><strong aria-hidden="true">2.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cmake/basic.html"><strong aria-hidden="true">2.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="../cmake/advanced.html"><strong aria-hidden="true">2.2.</strong> 高级用法</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Groveer/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="arch-linuxmbr-and-uefi安装"><a class="header" href="#arch-linuxmbr-and-uefi安装">Arch Linux(MBR and UEFI)安装</a></h1>
+<p>确认主板系统是UEFI,这里使用GPT分区格式，关于究竟该使用MBR还是GPT请参考<a href="https://wiki.archlinux.org/title/Partitioning_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E9%80%89%E6%8B%A9_GPT_%E8%BF%98%E6%98%AF_MBR">这里</a>。</p>
+<h2 id="下载arch-linux镜像"><a class="header" href="#下载arch-linux镜像">下载Arch Linux镜像</a></h2>
+<p><a href="https://www.archlinux.org/download/">下载地址</a><br>
+向下滚动到China下载，网易的节点就很快。</p>
+<h2 id="验证镜像完整性"><a class="header" href="#验证镜像完整性">验证镜像完整性</a></h2>
+<p><code>md5 archlinux-2021.05.01-x86_64.iso</code><br>
+将输出和下载页面提供的md5值对比一下，看看是否一致，不一致则不要继续安装，换个节点重新下载，直到一致为止。</p>
+<h2 id="将镜像写入u盘"><a class="header" href="#将镜像写入u盘">将镜像写入U盘</a></h2>
+<ul>
+<li><strong>Linux/Unix: dd</strong></li>
+</ul>
+<ol>
+<li>用<code>lsblk</code>找到U盘并确保没有挂载，使用<code>umount /dev/sdb1</code>卸载</li>
+<li>使用dd命令：<code>sudo dd bs=4M if=path/to/archlinux-version-x86_64.iso of=/dev/sdx conv=fsync oflag=direct status=progress</code></li>
+</ol>
+<ul>
+<li><strong>MacOS: dd</strong></li>
+</ul>
+<ol>
+<li><code>sudo su - root</code> 输入开机密码，获取root权限。</li>
+<li>查一下iso镜像在哪，pwd得到路径，我的在<font color=green>/Users/guo/Desktop/archlinux-2021.05.01-x86_64.iso</font></li>
+<li>查看U盘挂载点：<code>df -h</code>，我的是<font color=green>/dev/disk2</font></li>
+<li>卸载U盘再装：<code>diskutil unmountDisk /dev/disk2</code></li>
+<li><code>dd if=/Users/guo/Desktop/archlinux-2021.05.01-x86_64.iso of=/dev/disk2 bs=1m</code></li>
+</ol>
+<ul>
+<li><strong>Windows: <a href="https://sourceforge.net/projects/usbwriter/">USBWriter</a></strong></li>
+</ul>
+<h2 id="从u盘启动arch-live环境"><a class="header" href="#从u盘启动arch-live环境">从U盘启动Arch live环境</a></h2>
+<p>在<code>BIOS</code>中设置启动磁盘为刚刚写入镜像的U盘，一般来说开机按<code>F12</code>即可选择启动盘，如果不行，则需<code>F2</code>或<code>DEL</code>进入BIOS修改U盘为优先启动，注意装完系统后将U盘启动改回后面去。<br>
+进入U盘的启动引导程序后，选择第一项即可。</p>
+<h2 id="连接internet"><a class="header" href="#连接internet">连接internet</a></h2>
+<ul>
+<li>
+<p>查看连接：<code>ip link</code></p>
+</li>
+<li>
+<p>连接</p>
+<p>对于有线网络，安装镜像启动的时候，会默认启动dhcpcd，如果没有启动，可以手动启动：<code>dhcpcd</code></br>
+对于无线网络，官方推荐使用<a href="https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#iwctl">iwctl</a></p>
+</li>
+</ul>
+<h2 id="磁盘分区"><a class="header" href="#磁盘分区">磁盘分区</a></h2>
+<ul>
+<li>
+<p>查看磁盘设备<code>lsblk -f</code></p>
+</li>
+<li>
+<p>新建分区表：由于我的本子有两块硬盘，一块固态，一块机械，所以我将固态盘作为系统分区，机械盘作为数据分区，即根、boot、swap分区在固态盘上，home分区在机械盘上。<br>
+<code>fdisk /dev/sda</code><br></p>
+<ol>
+<li>输入<code>g</code>，新建GPT分区表</li>
+<li>输入<code>w</code>，保存修改，这个操作会抹掉磁盘所有数据，慎重执行！</li>
+<li>对<code>/dev/sdb</code>做同样处理。</li>
+</ol>
+</li>
+<li>
+<p>分区创建<br>
+1扇区 = 512字节<br>
+<code>fdisk /dev/sda</code><br></p>
+<ol>
+<li>新建 EFI System 分区（非UEFI引导可以省略此步）<br>
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，输入<code>+512M</code>（推荐大小）</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>1</code>，使用 EFI System 类型</li>
+</ol>
+</li>
+<li>新建 Linux root (x86-64) 分区
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，这里要考虑预留给 swap 分区空间，计算公式：root 分区结束扇区号 = 磁盘结束扇区号 - 分配给 swap 分区的空间 (GB) * 1024 * 1024 * 1024 / 512，输入后<code>Enter</code></li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>23</code>，使用 Linux root (x86-64) 类型</li>
+</ol>
+</li>
+<li>新建 Linux swap 分区（使用<a href="https://wiki.archlinux.org/title/Swap_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%BA%A4%E6%8D%A2%E6%96%87%E4%BB%B6">交换文件</a>可以省略此步）
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接 Enter，使用默认值</li>
+<li>分区结束扇区号，比如<code>+8G</code>，这里直接使用默认值，剩下的空间均给 swap 分区</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>19</code>，使用 Linux swap 类型</li>
+</ol>
+</li>
+<li>保存新建的分区
+<ol>
+<li>输入<code>w</code></br></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>机械盘进行分区：<code>fdisk /dev/sdb</code><br></p>
+<ol>
+<li>新建 Linux root (x86-64) 分区
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，直接<code>Enter</code>，使用默认值，使用全部空间</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>23</code>，使用 Linux root (x86-64) 类型</li>
+</ol>
+</li>
+<li>保存新建的分区
+<ol>
+<li>输入<code>w</code><br></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="磁盘格式化"><a class="header" href="#磁盘格式化">磁盘格式化</a></h2>
+<ul>
+<li>格式化 EFI System 分区：<code>mkfs.fat -F32 /dev/sda1</code><br>
+如果格式化失败，可能是磁盘设备存在 Device Mapper，一般来说使用了lvm，会存在这种情况
+<ul>
+<li>显示 dm 状态：<code>dmsetup status</code></li>
+<li>删除 dm：<code>dmsetup remove &lt;dev-id&gt;</code></li>
+</ul>
+</li>
+<li>格式化 Linux root 分区：<code>mkfs.ext4 /dev/sda2</code>、<code>mkfs.ext4 /dev/sdb1</code></li>
+<li>格式化 Linux swap 分区：<code>mkswap /dev/sda3</code> &amp;&amp; <code>swapon /dev/sda3</code></li>
+</ul>
+<h2 id="挂载文件系统"><a class="header" href="#挂载文件系统">挂载文件系统</a></h2>
+<p>在这里需要将除 swap 分区外，其他分区都挂上去，注意先后顺序不能错<br></p>
+<pre><code class="language-shell">mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mkdir /mnt/home
+mount /dev/sda1 /mnt/boot
+mount /dev/sdb1 /mnt/home
+</code></pre>
+<p>交换分区启用:<br></p>
+<pre><code class="language-shell">mkswap /dev/sda3
+swapon /dev/sda3
+</code></pre>
+<h2 id="配置-pacman-mirror"><a class="header" href="#配置-pacman-mirror">配置 pacman mirror</a></h2>
+<p>一般来说，不需要进行修改，如果发现下载速度很慢，可以修改其中顺序或加入<a href="https://wiki.archlinux.org/title/Mirrors_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%B8%AD%E5%9B%BD">中国节点</a>的地址<br>
+<code>vim /etc/pacman.d/mirrorlist</code></p>
+<h2 id="安装-arch-和-package-group"><a class="header" href="#安装-arch-和-package-group">安装 Arch 和 Package Group</a></h2>
+<p><code>pacstrap /mnt base base-devel linux linux-firmware</code></p>
+<h2 id="生成-fstab-文件"><a class="header" href="#生成-fstab-文件">生成 fstab 文件</a></h2>
+<p><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
+<h2 id="切换至安装好的-arch"><a class="header" href="#切换至安装好的-arch">切换至安装好的 Arch</a></h2>
+<p><code>arch-chroot /mnt</code></p>
+<h2 id="安装必备工具"><a class="header" href="#安装必备工具">安装必备工具</a></h2>
+<p><code>pacman -S vim networkmanager sudo</code></p>
+<h2 id="本地化"><a class="header" href="#本地化">本地化</a></h2>
+<ul>
+<li>修改 /etc/locale.gen，取消注释下面这两行配置：<br>
+<pre><code class="language-shell">en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+</code></pre>
+</li>
+<li>生成 locale 信息：<code>locale-gen</code></li>
+<li>创建 /etc/locale.conf 并写入：<code>LANG=en_US.UTF-8</code></li>
+</ul>
+<h2 id="网络配置"><a class="header" href="#网络配置">网络配置</a></h2>
+<ul>
+<li>修改 hostname，创建 /etc/hostname 并写入：<code>Arch</code></li>
+<li>配置 hosts，编辑 /etc/hosts
+<pre><code class="language-shell">127.0.0.1 localhost
+::1       localhost
+127.0.1.1 Arch.localdomain
+</code></pre>
+</li>
+</ul>
+<h2 id="修改-root-密码"><a class="header" href="#修改-root-密码">修改 root 密码</a></h2>
+<p><code>passwd</code></p>
+<h2 id="安装-microcode"><a class="header" href="#安装-microcode">安装 Microcode</a></h2>
+<ul>
+<li>AMD CPU：<code>pacman -S amd-ucode</code></li>
+<li>Intel CPU：<code>pacman -S intel-ucode</code></li>
+</ul>
+<h2 id="安装-grub"><a class="header" href="#安装-grub">安装 GRUB</a></h2>
+<p>MBR引导：</p>
+<pre><code class="language-shell">pacman -S grub
+grub-install --target=i386-pc /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<p>UEFI引导：</p>
+<pre><code class="language-shell">pacman -S grub efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<h2 id="重新启动"><a class="header" href="#重新启动">重新启动</a></h2>
+<pre><code class="language-shell">exit    # 退出 chroot 环境，或按 Ctrl+D
+reboot
+</code></pre>
+<h2 id="重启后的设置"><a class="header" href="#重启后的设置">重启后的设置</a></h2>
+<p>使用root账户登录后：</p>
+<ul>
+<li>开启时间自动同步
+<pre><code class="language-shell">timedatectl set-ntp true
+timedatectl set-timezone Asia/Shanghai
+</code></pre>
+</li>
+<li>新建用户
+<pre><code class="language-shell">useradd -m &lt;username&gt;
+</code></pre>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../archlinux/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../archlinux/config.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../archlinux/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../archlinux/config.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

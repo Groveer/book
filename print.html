@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="cmake/index.html"><strong aria-hidden="true">1.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cmake/basic.html"><strong aria-hidden="true">1.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="cmake/advanced.html"><strong aria-hidden="true">1.2.</strong> 高级用法</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="archlinux/index.html"><strong aria-hidden="true">1.</strong> Arch Linux</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="archlinux/install.html"><strong aria-hidden="true">1.1.</strong> 系统安装</a></li><li class="chapter-item expanded "><a href="archlinux/config.html"><strong aria-hidden="true">1.2.</strong> 系统配置</a></li><li class="chapter-item expanded "><a href="archlinux/install-nvidia.html"><strong aria-hidden="true">1.3.</strong> N卡驱动安装</a></li></ol></li><li class="chapter-item expanded "><a href="cmake/index.html"><strong aria-hidden="true">2.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cmake/basic.html"><strong aria-hidden="true">2.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="cmake/advanced.html"><strong aria-hidden="true">2.2.</strong> 高级用法</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -149,6 +149,505 @@
 </ol>
 </li>
 <li>其他类：杂项。</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="arch-linux"><a class="header" href="#arch-linux">Arch Linux</a></h1>
+<p>Arch Linux 是通用 x86-64 GNU/Linux 发行版。Arch采用滚动升级模式，尽全力提供最新的稳定版软件。初始安装的Arch只是一个基本系统，随后用户可以根据自己的喜好安装需要的软件并配置成符合自己理想的系统。</p>
+<h2 id="简洁"><a class="header" href="#简洁">简洁</a></h2>
+<p>Arch Linux 将简洁定义为：避免任何不必要的添加、修改和复杂增加。它提供的软件都来自原始开发者（上游），仅进行和发行版（下游）相关的最小修改。</p>
+<ul>
+<li>不包含上游不愿意接受的补丁。绝大部分 Arch 下游补丁都已经被上游接受，下一个正式版本里会包含。</li>
+<li>配置文件也是来自上游，仅包含发行版必须的调整，比如特殊的文件系统路径变动。Arch 不会在安装一个软件包后就自动启动服务。</li>
+<li>软件包通常都和一个上游项目直接对应。仅在极少数情况下才会拆分软件包。</li>
+<li>官方不支持图形化配置界面，建议用户使用命令行或文本编辑器修改设置。</li>
+</ul>
+<h2 id="现代"><a class="header" href="#现代">现代</a></h2>
+<p>Arch尽全力保持软件处于最新的稳定版本，只要不出现系统软件包破损，都尽量用最新版本。Arch采用滚动升级策略，安装之后可以持续升级。</p>
+<p>Arch向GNU/Linux用户提供了许多新特性，包括systemd初始化系统、现代的文件系统、LVM2/EVMS、软件磁盘阵列（软RAID）、udev支持、initcpio（附带mkinitcpio）以及最新的内核。</p>
+<h2 id="实用"><a class="header" href="#实用">实用</a></h2>
+<p>Arch 注重实用性，避免意识形态之争。最终的设计决策都是由开发者的共识决定。开发者依赖基于事实的技术分析和讨论，避免政治因素，不会被流行观点左右。</p>
+<p>Arch Linux 的仓库中包含大量的软件包和编译脚本。用户可以按照需要进行自由选择。仓库中既提供了开源、自由的软件，也提供了闭源软件。实用性大于意识形态。</p>
+<h2 id="以用户为中心"><a class="header" href="#以用户为中心">以用户为中心</a></h2>
+<p>许多 Linux 发行版都试图变得更“用户友好”，Arch Linux 则一直是，永远会是“以用户为中心”。此发行版是为了满足贡献者的需求，而不是为了吸引尽可能多的用户。Arch 适用于乐于自己动手的用户，他们愿意花时间阅读文档，解决自己的问题。</p>
+<p>Arch 鼓励每一个用户参与和贡献，报告和帮助修复 bugs，提供软件包补丁和参加核心项目：Arch 开发者都是志愿者，通过持续的贡献成为团队的一员。Archers 可以自行贡献软件包到 Arch 用户仓库，提升 ArchWiki 文档质量，在论坛、邮件列表或者IRC中给其它用户提供技术支持。Arch Linux 是全球很多用户的选择，已经有很多国际社区提供帮助和文档翻译。</p>
+<h2 id="通用"><a class="header" href="#通用">通用</a></h2>
+<p>Arch Linux 是通用发行版，初始安装仅提供命令行环境：用户不需要删除大量不需要的软件包，而是可以从官方软件仓库成千上万的高质量软件包中进行选择，搭建自己的系统。支持x86-64架构。</p>
+<p>Arch有一个易用的包管理系统Pacman，仅凭一条命令就升级整个系统。Arch还提供一个类似ports的包构建系统（Arch Build System），通过它可以轻松从源码构建和安装软件包，并用一个命令完成同步。你甚至可以用一个命令重新构建整个系统。Arch还提供Arch 用户仓库，它包含了成千上万个由用户维护的PKGBUILD脚本，配合makepkg工具，从编译到打包一气呵成。用户还能轻松构建和维护属于自己的自定义软件源。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="arch-linuxmbr-and-uefi安装"><a class="header" href="#arch-linuxmbr-and-uefi安装">Arch Linux(MBR and UEFI)安装</a></h1>
+<p>确认主板系统是UEFI,这里使用GPT分区格式，关于究竟该使用MBR还是GPT请参考<a href="https://wiki.archlinux.org/title/Partitioning_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E9%80%89%E6%8B%A9_GPT_%E8%BF%98%E6%98%AF_MBR">这里</a>。</p>
+<h2 id="下载arch-linux镜像"><a class="header" href="#下载arch-linux镜像">下载Arch Linux镜像</a></h2>
+<p><a href="https://www.archlinux.org/download/">下载地址</a><br>
+向下滚动到China下载，网易的节点就很快。</p>
+<h2 id="验证镜像完整性"><a class="header" href="#验证镜像完整性">验证镜像完整性</a></h2>
+<p><code>md5 archlinux-2021.05.01-x86_64.iso</code><br>
+将输出和下载页面提供的md5值对比一下，看看是否一致，不一致则不要继续安装，换个节点重新下载，直到一致为止。</p>
+<h2 id="将镜像写入u盘"><a class="header" href="#将镜像写入u盘">将镜像写入U盘</a></h2>
+<ul>
+<li><strong>Linux/Unix: dd</strong></li>
+</ul>
+<ol>
+<li>用<code>lsblk</code>找到U盘并确保没有挂载，使用<code>umount /dev/sdb1</code>卸载</li>
+<li>使用dd命令：<code>sudo dd bs=4M if=path/to/archlinux-version-x86_64.iso of=/dev/sdx conv=fsync oflag=direct status=progress</code></li>
+</ol>
+<ul>
+<li><strong>MacOS: dd</strong></li>
+</ul>
+<ol>
+<li><code>sudo su - root</code> 输入开机密码，获取root权限。</li>
+<li>查一下iso镜像在哪，pwd得到路径，我的在<font color=green>/Users/guo/Desktop/archlinux-2021.05.01-x86_64.iso</font></li>
+<li>查看U盘挂载点：<code>df -h</code>，我的是<font color=green>/dev/disk2</font></li>
+<li>卸载U盘再装：<code>diskutil unmountDisk /dev/disk2</code></li>
+<li><code>dd if=/Users/guo/Desktop/archlinux-2021.05.01-x86_64.iso of=/dev/disk2 bs=1m</code></li>
+</ol>
+<ul>
+<li><strong>Windows: <a href="https://sourceforge.net/projects/usbwriter/">USBWriter</a></strong></li>
+</ul>
+<h2 id="从u盘启动arch-live环境"><a class="header" href="#从u盘启动arch-live环境">从U盘启动Arch live环境</a></h2>
+<p>在<code>BIOS</code>中设置启动磁盘为刚刚写入镜像的U盘，一般来说开机按<code>F12</code>即可选择启动盘，如果不行，则需<code>F2</code>或<code>DEL</code>进入BIOS修改U盘为优先启动，注意装完系统后将U盘启动改回后面去。<br>
+进入U盘的启动引导程序后，选择第一项即可。</p>
+<h2 id="连接internet"><a class="header" href="#连接internet">连接internet</a></h2>
+<ul>
+<li>
+<p>查看连接：<code>ip link</code></p>
+</li>
+<li>
+<p>连接</p>
+<p>对于有线网络，安装镜像启动的时候，会默认启动dhcpcd，如果没有启动，可以手动启动：<code>dhcpcd</code></br>
+对于无线网络，官方推荐使用<a href="https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#iwctl">iwctl</a></p>
+</li>
+</ul>
+<h2 id="磁盘分区"><a class="header" href="#磁盘分区">磁盘分区</a></h2>
+<ul>
+<li>
+<p>查看磁盘设备<code>lsblk -f</code></p>
+</li>
+<li>
+<p>新建分区表：由于我的本子有两块硬盘，一块固态，一块机械，所以我将固态盘作为系统分区，机械盘作为数据分区，即根、boot、swap分区在固态盘上，home分区在机械盘上。<br>
+<code>fdisk /dev/sda</code><br></p>
+<ol>
+<li>输入<code>g</code>，新建GPT分区表</li>
+<li>输入<code>w</code>，保存修改，这个操作会抹掉磁盘所有数据，慎重执行！</li>
+<li>对<code>/dev/sdb</code>做同样处理。</li>
+</ol>
+</li>
+<li>
+<p>分区创建<br>
+1扇区 = 512字节<br>
+<code>fdisk /dev/sda</code><br></p>
+<ol>
+<li>新建 EFI System 分区（非UEFI引导可以省略此步）<br>
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，输入<code>+512M</code>（推荐大小）</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>1</code>，使用 EFI System 类型</li>
+</ol>
+</li>
+<li>新建 Linux root (x86-64) 分区
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，这里要考虑预留给 swap 分区空间，计算公式：root 分区结束扇区号 = 磁盘结束扇区号 - 分配给 swap 分区的空间 (GB) * 1024 * 1024 * 1024 / 512，输入后<code>Enter</code></li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>23</code>，使用 Linux root (x86-64) 类型</li>
+</ol>
+</li>
+<li>新建 Linux swap 分区（使用<a href="https://wiki.archlinux.org/title/Swap_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%BA%A4%E6%8D%A2%E6%96%87%E4%BB%B6">交换文件</a>可以省略此步）
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接 Enter，使用默认值</li>
+<li>分区结束扇区号，比如<code>+8G</code>，这里直接使用默认值，剩下的空间均给 swap 分区</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>19</code>，使用 Linux swap 类型</li>
+</ol>
+</li>
+<li>保存新建的分区
+<ol>
+<li>输入<code>w</code></br></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>机械盘进行分区：<code>fdisk /dev/sdb</code><br></p>
+<ol>
+<li>新建 Linux root (x86-64) 分区
+<ol>
+<li>输入<code>n</code></li>
+<li>选择分区区号，直接<code>Enter</code>，使用默认值，fdisk 会自动递增分区号</li>
+<li>分区开始扇区号，直接<code>Enter</code>，使用默认值</li>
+<li>分区结束扇区号，直接<code>Enter</code>，使用默认值，使用全部空间</li>
+<li>输入<code>t</code>修改刚刚创建的分区类型</li>
+<li>选择分区号，直接<code>Enter</code>， 使用默认值，fdisk 会自动选择刚刚新建的分区</li>
+<li>输入<code>23</code>，使用 Linux root (x86-64) 类型</li>
+</ol>
+</li>
+<li>保存新建的分区
+<ol>
+<li>输入<code>w</code><br></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="磁盘格式化"><a class="header" href="#磁盘格式化">磁盘格式化</a></h2>
+<ul>
+<li>格式化 EFI System 分区：<code>mkfs.fat -F32 /dev/sda1</code><br>
+如果格式化失败，可能是磁盘设备存在 Device Mapper，一般来说使用了lvm，会存在这种情况
+<ul>
+<li>显示 dm 状态：<code>dmsetup status</code></li>
+<li>删除 dm：<code>dmsetup remove &lt;dev-id&gt;</code></li>
+</ul>
+</li>
+<li>格式化 Linux root 分区：<code>mkfs.ext4 /dev/sda2</code>、<code>mkfs.ext4 /dev/sdb1</code></li>
+<li>格式化 Linux swap 分区：<code>mkswap /dev/sda3</code> &amp;&amp; <code>swapon /dev/sda3</code></li>
+</ul>
+<h2 id="挂载文件系统"><a class="header" href="#挂载文件系统">挂载文件系统</a></h2>
+<p>在这里需要将除 swap 分区外，其他分区都挂上去，注意先后顺序不能错<br></p>
+<pre><code class="language-shell">mount /dev/sda2 /mnt
+mkdir /mnt/boot
+mkdir /mnt/home
+mount /dev/sda1 /mnt/boot
+mount /dev/sdb1 /mnt/home
+</code></pre>
+<p>交换分区启用:<br></p>
+<pre><code class="language-shell">mkswap /dev/sda3
+swapon /dev/sda3
+</code></pre>
+<h2 id="配置-pacman-mirror"><a class="header" href="#配置-pacman-mirror">配置 pacman mirror</a></h2>
+<p>一般来说，不需要进行修改，如果发现下载速度很慢，可以修改其中顺序或加入<a href="https://wiki.archlinux.org/title/Mirrors_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%B8%AD%E5%9B%BD">中国节点</a>的地址<br>
+<code>vim /etc/pacman.d/mirrorlist</code></p>
+<h2 id="安装-arch-和-package-group"><a class="header" href="#安装-arch-和-package-group">安装 Arch 和 Package Group</a></h2>
+<p><code>pacstrap /mnt base base-devel linux linux-firmware</code></p>
+<h2 id="生成-fstab-文件"><a class="header" href="#生成-fstab-文件">生成 fstab 文件</a></h2>
+<p><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
+<h2 id="切换至安装好的-arch"><a class="header" href="#切换至安装好的-arch">切换至安装好的 Arch</a></h2>
+<p><code>arch-chroot /mnt</code></p>
+<h2 id="安装必备工具"><a class="header" href="#安装必备工具">安装必备工具</a></h2>
+<p><code>pacman -S vim networkmanager sudo</code></p>
+<h2 id="本地化"><a class="header" href="#本地化">本地化</a></h2>
+<ul>
+<li>修改 /etc/locale.gen，取消注释下面这两行配置：<br>
+<pre><code class="language-shell">en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+</code></pre>
+</li>
+<li>生成 locale 信息：<code>locale-gen</code></li>
+<li>创建 /etc/locale.conf 并写入：<code>LANG=en_US.UTF-8</code></li>
+</ul>
+<h2 id="网络配置"><a class="header" href="#网络配置">网络配置</a></h2>
+<ul>
+<li>修改 hostname，创建 /etc/hostname 并写入：<code>Arch</code></li>
+<li>配置 hosts，编辑 /etc/hosts
+<pre><code class="language-shell">127.0.0.1 localhost
+::1       localhost
+127.0.1.1 Arch.localdomain
+</code></pre>
+</li>
+</ul>
+<h2 id="修改-root-密码"><a class="header" href="#修改-root-密码">修改 root 密码</a></h2>
+<p><code>passwd</code></p>
+<h2 id="安装-microcode"><a class="header" href="#安装-microcode">安装 Microcode</a></h2>
+<ul>
+<li>AMD CPU：<code>pacman -S amd-ucode</code></li>
+<li>Intel CPU：<code>pacman -S intel-ucode</code></li>
+</ul>
+<h2 id="安装-grub"><a class="header" href="#安装-grub">安装 GRUB</a></h2>
+<p>MBR引导：</p>
+<pre><code class="language-shell">pacman -S grub
+grub-install --target=i386-pc /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<p>UEFI引导：</p>
+<pre><code class="language-shell">pacman -S grub efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+<h2 id="重新启动"><a class="header" href="#重新启动">重新启动</a></h2>
+<pre><code class="language-shell">exit    # 退出 chroot 环境，或按 Ctrl+D
+reboot
+</code></pre>
+<h2 id="重启后的设置"><a class="header" href="#重启后的设置">重启后的设置</a></h2>
+<p>使用root账户登录后：</p>
+<ul>
+<li>开启时间自动同步
+<pre><code class="language-shell">timedatectl set-ntp true
+timedatectl set-timezone Asia/Shanghai
+</code></pre>
+</li>
+<li>新建用户
+<pre><code class="language-shell">useradd -m &lt;username&gt;
+</code></pre>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="arch-linux安装后配置"><a class="header" href="#arch-linux安装后配置">Arch Linux安装后配置</a></h1>
+<h2 id="配置源"><a class="header" href="#配置源">配置源</a></h2>
+<h3 id="添加archlinuxcn仓库"><a class="header" href="#添加archlinuxcn仓库">添加<code>archlinuxcn</code>仓库</a></h3>
+<ol>
+<li>添加文件：<code>/etc/pacman.d/archlinuxcn-mirrorlist</code></br>
+添加内容：<code>Server = https://repo.archlinuxcn.org/$arch</code></br>
+更多内容：参考<a href="https://github.com/archlinuxcn/mirrorlist-repo/blob/master/archlinuxcn-mirrorlist">国内仓库</a></br></li>
+<li>修改文件：<code>/etc/pacman.conf</code></br>
+取消注释 <code>#Color</code></br>
+添加内容：</li>
+</ol>
+<pre><code>[archlinuxcn]
+Include = /etc/pacman.d/archlinux-mirrorlist
+</code></pre>
+<ol start="3">
+<li>安装 GPG key：</li>
+</ol>
+<pre><code class="language-shell">sudo pacman -Syu
+sudo pacman -S archlinuxcn-keyring
+</code></pre>
+<p>若安装失败，可以参考<a href="https://www.archlinuxcn.org/gnupg-2-1-and-the-pacman-keyring/">GnuPG-2.1 与 pacman 密钥环</a>重新生成密钥环。</p>
+<h3 id="配置aur"><a class="header" href="#配置aur">配置<a href="https://wiki.archlinux.org/title/Arch_User_Repository_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">aur</a></a></h3>
+<pre><code class="language-shell">sudo pacman -S yay
+</code></pre>
+<p>以后就可以使用<code>yay</code>代替<code>pacman</code>了，语法完全一致，无需提前<code>sudo</code>，并且可访问<code>aur</code>仓库。</p>
+<h3 id="安装扩展固件"><a class="header" href="#安装扩展固件">安装扩展固件</a></h3>
+<p>为了让电脑充分发挥性能，在配置<code>aur</code>仓库后，应安装扩展固件：</p>
+<pre><code class="language-shell">yay -S mkinitcpio-firmware
+</code></pre>
+<h2 id="配置控制台登录图形桌面"><a class="header" href="#配置控制台登录图形桌面">配置控制台登录图形桌面</a></h2>
+<h3 id="配置x11环境"><a class="header" href="#配置x11环境">配置X11环境</a></h3>
+<ol>
+<li>安装<a href="https://wiki.archlinux.org/title/Xorg_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">xorg</a>：</li>
+</ol>
+<pre><code class="language-shell">yay -S xorg-server xorg-xinit
+</code></pre>
+<ol start="2">
+<li>修改<code>～/.xinitrc</code>文件，并添加内容，挑选自己的桌面环境添加：</li>
+</ol>
+<pre><code>exec startplasma-x11       (kde-x11)
+exec startdde              (dde)
+exec gnome-session         (gnome)
+exec openbox-session       (openbox)
+exec startxfce4            (xfce)
+exec mate-session          (mate)
+</code></pre>
+<ol start="3">
+<li>修改<code>~/.bash_profile</code>(bash)或者<code>～/.zprofile</code>（zsh）文件，并添加内容：</li>
+</ol>
+<pre><code>if [[ -z $DISPLAY &amp;&amp; $(tty) == /dev/tty1 ]]; then
+  exec startx
+fi
+</code></pre>
+<h3 id="配置wayland环境"><a class="header" href="#配置wayland环境">配置Wayland环境</a></h3>
+<p>wayland本身只是个协议，并不提供图形环境，因此需要安装混合器或直接安装有内置混合器的桌面环境</p>
+<ol>
+<li>KDE桌面环境</li>
+</ol>
+<pre><code class="language-shell">yay -S plasma-desktop plasma-wayland-session
+startplasma-wayland
+</code></pre>
+<p>2、Gnome桌面环境</p>
+<pre><code>yay -S gnome-shell
+gnome-shell --wayland
+</code></pre>
+<p>其他桌面环境自行搜索：<a href="https://wiki.archlinux.org/title/Wayland">wayland</a></p>
+<p>注意：某些应用程序是支持wayland协议，但是默认却走的xwayland，导致显示效果很不理想，可以设置环境变量或配置文件使其走wayland协议</p>
+<ol>
+<li>Firefox：
+环境变量：</li>
+</ol>
+<pre><code>MOZ_ENABLE_WAYLAND=1
+</code></pre>
+<ol start="2">
+<li>Chromium：
+在<code>~/.config/chromium-flags.conf</code>中，添加以下几行:</li>
+</ol>
+<pre><code>--enable-features=UseOzonePlatform
+--ozone-platform=wayland
+--enable-features=WebRTCPipeWireCapturer
+</code></pre>
+<ol start="3">
+<li>qt程序：
+需要额外安装：</li>
+</ol>
+<pre><code class="language-shell">yay -S qt5-wayland qt6-wayland
+</code></pre>
+<p>然后每次启动程序添加参数：<code>-platform wayland</code>
+或直接设置<code>QT_QPA_PLATFORM=wayland</code>，这样就不必每次添加参数</p>
+<h2 id="安装oh-my-zsh及插件"><a class="header" href="#安装oh-my-zsh及插件">安装<a href="https://github.com/ohmyzsh/ohmyzsh">oh-my-zsh</a>及插件</a></h2>
+<ol>
+<li>安装必备工具：</li>
+</ol>
+<pre><code class="language-shell">yay -S git wget
+</code></pre>
+<ol start="2">
+<li>安装<code>oh-my-zsh</code>：
+创建文件<code>install.sh</code>并写入以下<a href="https://gitee.com/mirrors/oh-my-zsh/blob/master/tools/install.sh">链接</a>中的内容<br>
+修改以下内容：</li>
+</ol>
+<pre><code class="language-shell"># Default settings
+ZSH=${ZSH:-~/.oh-my-zsh}
+REPO=${REPO:-ohmyzsh/ohmyzsh}
+REMOTE=${REMOTE:-https://github.com/${REPO}.git}
+BRANCH=${BRANCH:-master}
+</code></pre>
+<p>改为：</p>
+<pre><code>REPO=${REPO:-mirrors/oh-my-zsh}
+REMOTE=${REMOTE:-https://gitee.com/${REPO}.git}
+</code></pre>
+<p>添加可执行权限：</p>
+<pre><code class="language-shell">chmod +x install.sh
+</code></pre>
+<p>执行脚本进行安装：</p>
+<pre><code class="language-shell">./install.sh
+</code></pre>
+<ol start="3">
+<li>安装历史记录插件和语法检查插件</li>
+</ol>
+<pre><code class="language-shell">cd ~/.oh-my-zsh/plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions.git
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+</code></pre>
+<ol start="4">
+<li>修改<code>～/.zshrc</code>文件，找到<code>plugins=(git)</code>，改为：</li>
+</ol>
+<pre><code>plugins=(
+	git
+	sudo
+	zsh-syntax-highlighting
+	zsh-autosuggestions
+)
+</code></pre>
+<ol start="5">
+<li>使插件生效：</li>
+</ol>
+<pre><code class="language-shell">source ~/.zshrc
+</code></pre>
+<h2 id="安装输入法"><a class="header" href="#安装输入法">安装输入法</a></h2>
+<ol>
+<li>安装<a href="https://wiki.archlinux.org/title/Fcitx5_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">fcitx5</a>：</li>
+</ol>
+<pre><code class="language-shell">yay -S fcitx5 fcitx5-chinese-addons fcitx5-gtk fcitx5-configtool
+</code></pre>
+<ol start="2">
+<li>配置环境变量<code>/etc/environment</code>：</li>
+</ol>
+<pre><code>GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+INPUT_METHOD=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=ibus
+</code></pre>
+<h2 id="配置开发环境"><a class="header" href="#配置开发环境">配置开发环境</a></h2>
+<h3 id="python"><a class="header" href="#python">python</a></h3>
+<ol>
+<li>下载pip</li>
+</ol>
+<pre><code class="language-shell">yay -S python-pip
+</code></pre>
+<ol start="2">
+<li>设置pip源</li>
+</ol>
+<pre><code class="language-shell">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+</code></pre>
+<h3 id="golang"><a class="header" href="#golang">golang</a></h3>
+<ol>
+<li>安装<a href="https://wiki.archlinux.org/title/Go_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">go</a>：</li>
+</ol>
+<pre><code class="language-shell">yay -S go
+</code></pre>
+<ol start="2">
+<li>选择一个go工作目录，以<code>～/Develop/go</code>为例，新建三个目录：</li>
+</ol>
+<pre><code class="language-shell">mkdir -p ~/Develop/{src,bin.pkg}
+</code></pre>
+<ol start="3">
+<li>配置环境变量<code>~/bash_profile</code>：</li>
+</ol>
+<pre><code class="language-shell">export GOROOT=/usr/lib/go
+export GOPATH=~/Develop/go		   # 这两行你需要
+export GOBIN=~/Develop/go/bin		# 修改为自己的
+export PATH=$PATH:$GOROOT/bin:$GOBIN
+</code></pre>
+<pre><code class="language-shell">source ~/bash_profile
+</code></pre>
+<ol start="4">
+<li>配置GOPROXY</li>
+</ol>
+<pre><code class="language-shell">go env -w GOPROXY=https://goproxy.io,direct
+</code></pre>
+<h2 id="安装kde桌面环境"><a class="header" href="#安装kde桌面环境">安装KDE桌面环境</a></h2>
+<ol>
+<li>最小化安装：</li>
+</ol>
+<pre><code class="language-shell">yay -S plasma-desktop
+yay -S plasma-nm plasma-pa kscreen bluedevil powerdevil kwalletmanager konsole
+</code></pre>
+<p><code>plasma-desktop</code>：基本的KDE桌面环境<br>
+<code>plasma-nm</code>：网络管理模块，右下角的网络连接以及系统设置中的网络设置<br>
+<code>plasma-pa</code>：声音模块，右下角的声音设置以及系统设置中的音频设置<br>
+<code>kscreen</code>：屏幕管理模块，系统设置中的显示器配置<br>
+<code>bluedevil</code>：蓝牙模块，启用需<code>systemctl enable bluetooth</code><br>
+<code>powerdevil</code>：电源管理模块，系统设置中的电源管理<br>
+<code>kwalletmanager</code>：KDE 钱包管理，一般用来禁用电子钱包<br>
+<code>konsole</code>：KDE 的仿真终端<br>
+2. 基本安装：<br>
+基本安装并不代表最小化安装，基本安装会附带很多程序，如桌面小工具、discover等</p>
+<pre><code class="language-shell">yay -S plasma
+</code></pre>
+<ol start="3">
+<li>安装KDE应用：
+注意，这仅仅安装应用程序，并不会安装 Plasma 桌面。</li>
+</ol>
+<pre><code class="language-shell">yay -S kde-applications
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="arch-linux-安装nvidia驱动"><a class="header" href="#arch-linux-安装nvidia驱动">Arch Linux 安装NVIDIA驱动</a></h1>
+<h2 id="禁用-nouveau"><a class="header" href="#禁用-nouveau">禁用 nouveau</a></h2>
+<ol>
+<li>编辑配置文件，没有则创建：
+<pre><code>sudo vim /etc/modprobe.d/blacklist.conf
+</code></pre>
+</li>
+<li>在最后一行添加：
+<pre><code>blacklist nouveau
+</code></pre>
+</li>
+<li>生成新的initrd：
+<pre><code>mkinitcpio -p linux
+</code></pre>
+</li>
+</ol>
+<h2 id="重启"><a class="header" href="#重启">重启</a></h2>
+<ol>
+<li>执行重启命令：
+<pre><code>reboot
+</code></pre>
+</li>
+<li>重启之后查看 nouveau 是否运行，没有输出代表禁用生效：
+<pre><code>lsmod | grep nouveau
+</code></pre>
+</li>
+</ol>
+<h2 id="停止可视化桌面"><a class="header" href="#停止可视化桌面">停止可视化桌面</a></h2>
+<ol>
+<li>如果使用显示管理器，切换到其他 tty 进行关闭，如 lightdm：
+<pre><code>sudo systemctl stop lightdm
+</code></pre>
+</li>
+<li>如果直接startx启动图形服务，退出窗口管理器即可，如 openbox 的<code>Log Out</code></li>
+</ol>
+<h2 id="安装驱动"><a class="header" href="#安装驱动">安装驱动</a></h2>
+<ol>
+<li>Arch Linux 可以直接安装 Nvidia 驱动：
+<pre><code>sudo pacman -S nvidia
+</code></pre>
+</li>
+<li>重启图形服务后检查：
+<pre><code>nvidia-smi
+</code></pre>
+</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cmake"><a class="header" href="#cmake">CMake</a></h1>
 <p>你或许听过好几种 Make 工具，例如 GNU Make，Qt 的 qmake，微软的 MS nmake，BSD Make（pmake），Makepp 等等。这些 Make 工具遵循着不同的规范和标准，所执行的 Makefile 格式也千差万别。这样就带来了一个严峻的问题：如果软件想跨平台，必须保证能够在不同平台的编译。而如果使用上面的 Make 工具，就得为每一种标准写一次 Makefile，这将是一件令人抓狂的工作。</p>
