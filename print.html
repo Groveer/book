@@ -738,7 +738,7 @@ cmake --build build
     set(VERSION &quot;1.0.0&quot;)
 endif()
 </code></pre>
-<p>这段代码的意思是：当未指定 VERSION 这个变量时，将自动指定 VERSION 变量的值为“1.0.0”。在使用 cmake 命名时，-D后接变量名表示定义某个变量，具体语法为：-D<var>=<value>，这里指定版本号是为了添加宏定义以方便代码中指定二进制版本号。</p>
+<p>这段代码的意思是：当未指定 VERSION 这个变量时，将自动指定 VERSION 变量的值为“1.0.0”。在使用 cmake 命名时，-D后接变量名表示定义某个变量，具体语法为：-D&lt;var&gt;=&lt;value&gt;，这里指定版本号是为了添加宏定义以方便代码中指定二进制版本号。</p>
 <ul>
 <li>有时候将一些变量定义为 YES/NO 或者 ON/OFF 会有意想不到的结果。</li>
 </ul>
@@ -858,7 +858,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra&quot;)
-set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} &quot;-Wl,--as-needed&quot;)
+set(CMAKE_SHARED_LINKER_FLAGS &quot;${CMAKE_SHARED_LINKER_FLAGS} -Wl,--as-needed&quot;)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Install settings
