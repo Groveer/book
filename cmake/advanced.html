@@ -171,7 +171,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL &quot;Debug&quot;)
-    set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -O1 -g -fsanitize=address -fno-omit-frame-pointer&quot;)+
+    set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -g -fsanitize=address -fno-omit-frame-pointer&quot;)+
 else ()
     set(CMAKE_CXX_FLAGS &quot;${CMAKE_CXX_FLAGS} -Ofast&quot;)
 endif ()
