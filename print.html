@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="archlinux/index.html"><strong aria-hidden="true">1.</strong> Arch Linux</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="archlinux/install.html"><strong aria-hidden="true">1.1.</strong> 系统安装</a></li><li class="chapter-item expanded "><a href="archlinux/config.html"><strong aria-hidden="true">1.2.</strong> 系统配置</a></li><li class="chapter-item expanded "><a href="archlinux/install-nvidia.html"><strong aria-hidden="true">1.3.</strong> N卡驱动安装</a></li></ol></li><li class="chapter-item expanded "><a href="cmake/index.html"><strong aria-hidden="true">2.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cmake/basic.html"><strong aria-hidden="true">2.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="cmake/advanced.html"><strong aria-hidden="true">2.2.</strong> 高级用法</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Linux</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="linux/auto-login.html"><strong aria-hidden="true">1.1.</strong> 自动登录</a></li><li class="chapter-item expanded "><a href="linux/zram.html"><strong aria-hidden="true">1.2.</strong> zram交换空间</a></li></ol></li><li class="chapter-item expanded "><a href="archlinux/index.html"><strong aria-hidden="true">2.</strong> Arch Linux</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="archlinux/install.html"><strong aria-hidden="true">2.1.</strong> 系统安装</a></li><li class="chapter-item expanded "><a href="archlinux/config.html"><strong aria-hidden="true">2.2.</strong> 系统配置</a></li><li class="chapter-item expanded "><a href="archlinux/install-nvidia.html"><strong aria-hidden="true">2.3.</strong> N卡驱动安装</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Deepin</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="deepin/repair-system.html"><strong aria-hidden="true">3.1.</strong> 系统修复</a></li></ol></li><li class="chapter-item expanded "><a href="cmake/index.html"><strong aria-hidden="true">4.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cmake/basic.html"><strong aria-hidden="true">4.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="cmake/advanced.html"><strong aria-hidden="true">4.2.</strong> 高级用法</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Qt</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="qt/tips.html"><strong aria-hidden="true">5.1.</strong> 小技巧</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> 工具</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="tools/git.html"><strong aria-hidden="true">6.1.</strong> git</a></li><li class="chapter-item expanded "><a href="tools/qemu.html"><strong aria-hidden="true">6.2.</strong> qemu</a></li><li class="chapter-item expanded "><a href="tools/vim.html"><strong aria-hidden="true">6.3.</strong> vim</a></li><li class="chapter-item expanded "><a href="tools/vnc.html"><strong aria-hidden="true">6.4.</strong> vnc</a></li><li class="chapter-item expanded "><a href="tools/vscode.html"><strong aria-hidden="true">6.5.</strong> vscode</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -150,6 +150,71 @@
 </li>
 <li>其他类：杂项。</li>
 </ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用systemd实现自动登陆"><a class="header" href="#使用systemd实现自动登陆">使用systemd实现自动登陆</a></h1>
+<ol>
+<li>修改文件<code>/etc/systemd/system/getty.target.wants/getty@tty1.service</code></li>
+<li>追加<code>-a/--autologin USERNAME</code>到该行：<code>ExecStart=-/sbin/agetty --noclear %I $TERM</code></li>
+<li>修改后：<code>ExecStart=-/sbin/agetty -a USERNAME %I $TERM</code></li>
+<li>可能还会删除<code>-o '-p -- \\u'</code>（当前Arch安装中存在），因为这将启动登录名，USERNAME但仍要求输入密码。</li>
+<li>重新启动后，您将自动登录。</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="使用zram创建swap分区"><a class="header" href="#使用zram创建swap分区">使用zram创建swap分区</a></h1>
+<p>以下是一个简单的脚本用来创建zram swap设备，注意，这个脚本假设你还没有使用zram，并提供了启动的systemd配置:</p>
+<ol>
+<li><code>/usr/local/bin/zramswap-on</code>:</li>
+</ol>
+<pre><code class="language-shell">#!/bin/bash
+# Disable zswap
+echo 0 &gt; /sys/module/zswap/parameters/enabled
+
+# Load zram module
+modprobe zram
+
+# use zstd compression
+echo zstd &gt; /sys/block/zram0/comp_algorithm
+
+# echo 512M &gt; /sys/block/zram0/disksize
+echo 2G &gt; /sys/block/zram0/disksize
+
+mkswap /dev/zram0
+
+# Priority can have values between -1 and 32767
+swapon /dev/zram0 -p 32767
+</code></pre>
+<ol start="2">
+<li><code>/usr/local/bin/zramswap-off</code>:</li>
+</ol>
+<pre><code class="language-shell">#!/bin/bash
+swapoff /dev/zram0
+echo 0 &gt; /sys/class/zram-control/hot_remove
+
+# Not required, but creating a blank uninitalzed drive
+# after removing one may be desired
+cat /sys/class/zram-control/hot_add
+</code></pre>
+<ol start="3">
+<li><code>/etc/systemd/system/create-zram-swap.service</code></li>
+</ol>
+<pre><code class="language-shell">[Unit]
+Description=Configures zram swap device
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/zramswap-on
+ExecStop=/usr/local/bin/zramswap-off
+RemainAfterExit=yes
+
+[Install]
+WantedBy = multi-user.target
+</code></pre>
+<p>然后执行服务配置加载和激活:</p>
+<pre><code class="language-shell">sudo chmod +x /usr/local/bin/zramswap-on
+sudo chmod +x /usr/local/bin/zramswap-off
+sudo systemctl daemon-reload
+sudo systemctl enable --now create-zram-swap.service
+</code></pre>
+<p><em>参考</em>：<a href="https://cloud-atlas.readthedocs.io/zh_CN/latest/linux/redhat_linux/kernel/zram.html">https://cloud-atlas.readthedocs.io/zh_CN/latest/linux/redhat_linux/kernel/zram.html</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="arch-linux"><a class="header" href="#arch-linux">Arch Linux</a></h1>
 <p>Arch Linux 是通用 x86-64 GNU/Linux 发行版。Arch采用滚动升级模式，尽全力提供最新的稳定版软件。初始安装的Arch只是一个基本系统，随后用户可以根据自己的喜好安装需要的软件并配置成符合自己理想的系统。</p>
 <h2 id="简洁"><a class="header" href="#简洁">简洁</a></h2>
@@ -649,6 +714,46 @@ yay -S plasma-nm plasma-pa kscreen bluedevil powerdevil kwalletmanager konsole
 </code></pre>
 </li>
 </ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="deepin-系统修复方法"><a class="header" href="#deepin-系统修复方法">Deepin 系统修复方法</a></h1>
+<h2 id="简介"><a class="header" href="#简介">简介</a></h2>
+<p>Deepin系统是一个基于debian的操作系统（Deepin为其专业版），最近发现很多小伙伴在升级时可能导致系统崩溃，无法进入的情况，这里提供一个通用的修复方法。一般升级出现的问题都是系统核心模块没有正常升级导致(通常是systemd);这里的修复方法是通过live系统对Deepin本身的文件系统进行挂载，然后chroot进去进行再次更新来进行修复。</p>
+<h2 id="术语说明"><a class="header" href="#术语说明">术语说明</a></h2>
+<p>Deepin：Deepin操作系统，基于debian实现，属于一种linux发行版。</p>
+<p>live：live系统，通过iso制作的启动盘就是live系统，任何启动盘都可以。</p>
+<p>chroot：这是一个命令，目的是切换根目录，将某个目录当作根目录来识别。</p>
+<h2 id="关于磁盘挂载的知识"><a class="header" href="#关于磁盘挂载的知识">关于磁盘挂载的知识</a></h2>
+<p>在linux系统中，分区的挂载不像windows中那样分为C盘、D盘，在linux中，所有分区都是以挂载点的方式挂到指定的目录中，而且必须有一个根分区，其挂载点就是<code>/</code>。</p>
+<p>如：有这样一个分区方案，用户在安装时，将<code>/dev/sda</code>磁盘分了两个分区进行安装，其中一个是根分区，另一个是<code>home</code>分区，什么意思呢，就是有一个分区的路径是<code>/dev/sda1</code>，叫做第一个分区，其挂载点是<code>/</code>，还有一个分区的路径是<code>/dev/sda2</code>，叫做第二个分区，其挂载点是<code>/home</code>，这样，用户在使用时，系统的数据全部在第一个分区中，而用户的数据就全部在第二个分区中。对于操作系统来说，其并不关心<code>/home</code>是哪个分区，它只要有这个路径就行，如果没有第二个分区，它就会使用第一个分区的空间，不管有没有第二个分区，只有有一个根分区，并且其根文件系统在其中，就可以运行linux操作系统。</p>
+<p>现在我们知道，分区的挂载最重要的是挂载点，那么如何进行挂载？可以使用<code>mount</code>与<code>unmount</code>命令进行挂载和卸载，如上方所言，需要将<code>/dev/sda1</code>挂载到<code>/mnt</code>目录，那么可以使用<code>sudo mount /dev/sda1 /mnt</code>即可。那如何知道自己的分区是<code>/dev/sda1</code>？使用<code>lsblk -f</code>查询一下即可，该命令会输出所有的分区信息。</p>
+<h2 id="操作步骤"><a class="header" href="#操作步骤">操作步骤</a></h2>
+<ol>
+<li>首先需要准备一个启动盘，任何版本都可以，启动盘的制作这里不再赘述。</li>
+<li>将启动盘插入电脑，然后以U盘启动进入安装界面。</li>
+<li>按<code>ctrl+alt+f2</code>切换tty,等待片刻。</li>
+<li>这一步很重要，需要首先知道根分区是哪个分区，可以通过<code>lsblk -f</code>命令查看当前电脑里有哪些分区，一般<code>ext4</code>格式为Deepin的根分区，当然，可能不止一个<code>ext4</code>分区，可以凭借记忆挂载根分区，如果真的忘记了也不要紧，可以把每个ext4分区挂载一遍，然后查看一下就清楚了。</li>
+<li>查到根分区后就可以查看<code>fstab</code>的内容，这个文件是指定Deepin系统所有分区的挂载方式，任何分区方案都在这里写的明明白白。如当前电脑中<code>/dev/sda2</code>是Deepin的根分区，那么可以使用<code>sudo mount /dev/sda2 /mnt</code>进行挂载，然后<code>cat /mnt/etc/fstab</code>查看<code>fstab</code>的内容。</li>
+<li>如我的Deepin分区方案是这样，<code>/dev/sda1</code>是根分区，<code>/dev/sda2</code>是home分区，那么，可以这样挂载：</li>
+</ol>
+<pre><code>sudo mount /dev/sda1 /mnt
+sudo mount /dev/sda2 /mnt/home
+</code></pre>
+<ol start="7">
+<li>分区挂载好了，还需要将设备文件绑定过去，分别按下面顺序进行挂载：</li>
+</ol>
+<pre><code>sudo mount --bind /sys /mnt/sys
+sudo mount --bind /proc /mnt/proc
+sudo mount --bind /dev /mnt/dev
+sudo mount --bind /dev/pts /mnt/dev/pts
+</code></pre>
+<ol start="8">
+<li>分区和设备文件都挂载好了，可以chroot进入Deepin的根进行继续更新Deepin了，<code>sudo chroot /mnt</code>，这时会发现终端变得不一样了，说明已经成功进行chroot了，然后执行一下:</li>
+</ol>
+<pre><code>apt update
+apt dist-upgrade
+update-grub
+</code></pre>
+<p>当执行<code>apt update</code>可能会出现无法获取仓库源的情况，这是由于live系统未激活导致，但是一般会出现<code>dpkg --configure -a</code>的提示，此时使用该命令再次更新即可。
+9. 至此，Deepin系统已经成功进行再次更新，然后按<code>ctrl+d</code>退出chroot环境，最后使用<code>sudo reboot</code>重启系统进行Deepin就可以查看是否正常了</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cmake"><a class="header" href="#cmake">CMake</a></h1>
 <p>你或许听过好几种 Make 工具，例如 GNU Make，Qt 的 qmake，微软的 MS nmake，BSD Make（pmake），Makepp 等等。这些 Make 工具遵循着不同的规范和标准，所执行的 Makefile 格式也千差万别。这样就带来了一个严峻的问题：如果软件想跨平台，必须保证能够在不同平台的编译。而如果使用上面的 Make 工具，就得为每一种标准写一次 Makefile，这将是一件令人抓狂的工作。</p>
 <p>CMake就是针对上面问题所设计的工具：它首先允许开发者编写一种平台无关的 CMakeLists.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化 Makefile和工程文件，如 Unix 的Makefile 或 Windows 的 Visual Studio工程。从而做到“一次编写，多处运行”。显然，CMake是一个比上述几种 make 更高级的编译配置工具一些使用 CMake 作为项目架构系统的知名开源项目有 VTK、ITK、KDE、OpenCV、OSG 等。</p>
@@ -1055,6 +1160,619 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}.pc DESTINATION ${CMAKE_INS
                [NEWLINE_STYLE [UNIX|DOS|WIN32|LF|CRLF] ])
 </code></pre>
 <p>在经过编译后，就可以在 build 目录中发现生成了 qtdemo.pc 文件，打开后发现使用 cmake 变量的值都已经被换成实际编译中所获取的值。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="提升代码质量的方法"><a class="header" href="#提升代码质量的方法">提升代码质量的方法</a></h1>
+<ol>
+<li>尽量使用前置声明，而非一味的包头文件</li>
+<li>外部无需调用的成员函数尽量声明为private，而非一味的放在public声明中</li>
+<li>能在函数中声明的变量，不要声明为成员变量，减少变量作用域</li>
+<li>只在cpp文件中使用的常量，不要声明在h文件中</li>
+<li>常量尽量使用const引用，而非static</li>
+<li>针对形参，如果是类则使用const引用，如果是基本数据类型则使用const进行修饰</li>
+<li>在使用qt信号槽+lambda表达式时，第三个参数尽量指定具体对象，否则可能造成意想不到的问题</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="git命令使用方法"><a class="header" href="#git命令使用方法">git命令使用方法</a></h1>
+<h2 id="统计两个tag间代码增删情况"><a class="header" href="#统计两个tag间代码增删情况">统计两个tag间代码增删情况</a></h2>
+<pre><code>git diff tag1..tag2 --shortstat ':(exclude)translations'
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="如何优雅的使用qemu-kvm"><a class="header" href="#如何优雅的使用qemu-kvm">如何优雅的使用qemu-kvm</a></h1>
+<h2 id="为何要用qemu-kvm"><a class="header" href="#为何要用qemu-kvm">为何要用qemu-kvm</a></h2>
+<p>作为开发人员，往往需要在各种环境中进行调试，由于硬件资源的限制，调试环境的配置，往往需要花费大量的时间，本篇文章旨在使用qemu-kvm来配置各种调试环境，并且合理使用快照功能来实现各个环境的切换。</p>
+<h2 id="名词解释"><a class="header" href="#名词解释">名词解释</a></h2>
+<ol>
+<li>宿主机：通常为用户使用的机器，通常称为主机</li>
+<li>虚拟机：顾名思义，就是虚拟机</li>
+</ol>
+<h2 id="虚拟机的安装"><a class="header" href="#虚拟机的安装">虚拟机的安装</a></h2>
+<p>本篇文章希望读者可以理解qemu的运行原理，故不会介绍gui相关的操作，有兴趣的同学可以自行搜索相关知识。虚拟机的安装很简单，一般只要安装<code>qemu-kvm</code>这个包即可，<code>Archlinux</code>最新版应该是<code>qemu</code>包</p>
+<h2 id="创建硬盘镜像"><a class="header" href="#创建硬盘镜像">创建硬盘镜像</a></h2>
+<ol>
+<li>硬盘镜像是一个文件，存储虚拟机硬盘上的内容。</li>
+<li>一种硬盘镜像可能是<code>raw</code>镜像, 和主机上看到的内容一模一样，并且将始终使用主机上的硬盘驱动器的全部容量。此方法提供的I/O开销最小，但可能会浪费大量空间，因为虚拟机上未使用的空间无法在主机上使用。</li>
+<li>另外一种方式是<code>qcow2</code>格式，仅当主机实际写入内容的时候，才会分配镜像空间。对虚拟机来说，硬盘大小表现为完整大小，即使它可能仅占用主机系统上的非常小的空间。此映像格式还支持QEMU快照功能。但是，使用此格式可能会影响性能。</li>
+<li>在创建硬盘镜像之前，需要准备一个目录存放硬盘镜像文件，一般为用户<code>home</code>目录。需要注意的是，如果主机使用的是<code>btrfs</code>文件系统，那么需要关闭其写时复制功能：<code>chattr +C dir</code>。</li>
+<li>准备好目录后，可以在当前目录执行：<code>qemu-img create -f qcow2 image_file 80G</code>来创建硬盘镜像，也可以使用<code>-f raw</code>来创建raw格式的硬盘镜像，但是该格式不支持快照功能。</li>
+</ol>
+<h2 id="安装系统"><a class="header" href="#安装系统">安装系统</a></h2>
+<ol>
+<li>准备好安装介质，一般是各个操作系统发行版发布的iso文件。</li>
+<li>第一次启动模拟器，为了在磁盘镜像上安装操作系统，必须同时将磁盘镜像与安装介质装载到虚拟机上，从安装介质中启动操作系统：<code>qemu-system-x86_64 -cdrom iso_image -boot menu=on -drive file=disk_image -m 4G -smp 4 -enable-kvm</code>。
+<ol>
+<li>-cdrom 参数指定安装介质。</li>
+<li>-boot 参数指定引导顺序，使用<code>menu=on</code>可以在虚拟机刚启动时按<code>esc</code>来手动选择启动顺序。</li>
+<li>-drive 参数指定硬盘镜像文件，该参数可以指定多个文件，但不同的文件有不同的用处，有兴趣的同学可以自行搜索相关资料。</li>
+<li>-m 参数指定虚拟机所使用的内存大小，可以自行调整，单位可以是M或G。</li>
+<li>-smp 参数指定虚拟机所使用的CPU个数，可以自行调整。</li>
+<li>-enable-kvm 参数使用kvm内核模块，如果不使用，虚拟机性能会非常差，如果开启失败，请检查bios设置中的虚拟机技术支持是否开启。</li>
+</ol>
+</li>
+<li>安装完成后，以后每次启动可以去掉<code>-cdrom</code>参数。</li>
+</ol>
+<h2 id="快照管理"><a class="header" href="#快照管理">快照管理</a></h2>
+<p>在虚拟机关机状态下，使用<code>qemu-img snapshot</code>进行快照管理，可以使用<code>qemu-img snapshot --help</code>查看帮助，注意只有qcow2才能使用快照功能。<br>
+1. <code>qemu-img snapshot -c Tag disk_image</code>在<code>disk_image</code>文件中创建名为<code>Tag</code>的快照。<br>
+2. <code>qemu-img snapshot -l disk_image</code>查看<code>disk_image</code>文件中的快照信息。<br>
+3. <code>qemu-img snapshot -a Tag disk_image</code>将<code>disk_image</code>还原到<code>Tag</code>时。<br>
+4. <code>qemu-img snapshot -d Tag disk_image</code>将<code>disk_image</code>文件中的<code>Tag</code>快照删除。<br></p>
+<h2 id="硬盘镜像扩展"><a class="header" href="#硬盘镜像扩展">硬盘镜像扩展</a></h2>
+<ol>
+<li>当硬盘镜像不够使用时，可以对其进行扩展：<code>qemu-img resize disk_image +/-10G</code>。</li>
+<li>在磁盘映像扩容后，必须使用虚拟机内部系统的分区工具对该镜像进行分区并格式化后才能真正开始使用新空间。在收缩磁盘映像时，必须首先使用虚拟机内部系统的分区工具减少分该分区的大小，然后相应地收缩磁盘映像，否则收缩磁盘映像将导致数据丢失！</li>
+<li><code>注意</code>：调整包含NTFS引导文件系统的镜像将无法启动已安装的操作系统，推荐在操作之前进行备份。</li>
+</ol>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>使用上述的技巧可以灵活的使用虚拟机，并且可以将<code>qcow2</code>文件放置在移动硬盘中进行携带，那么一个硬盘镜像文件几乎可以满足各种调试场景的需求了。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="保存时获得sudo权限"><a class="header" href="#保存时获得sudo权限">保存时获得sudo权限</a></h1>
+<pre><code class="language-shell">:w !sudo tee %
+</code></pre>
+<ol>
+<li>命令:<code>w !{cmd}</code>，让 <code>vim</code> 执行一个外部命令{cmd}，然后把当前缓冲区的内容从 stdin 传入。</li>
+<li><code>tee</code> 是一个把 <code>stdin</code> 保存到文件的小工具。</li>
+<li>而 <code>%</code>，是<code>vim</code>当中一个只读寄存器的名字，总保存着当前编辑文件的文件路径。</li>
+</ol>
+<h1 id="简单高效的vim配置"><a class="header" href="#简单高效的vim配置">简单高效的vim配置</a></h1>
+<p>创建<code>~/.vimrc</code>文件并输入：</p>
+<pre><code class="language-vim">set nocompatible    &quot; 关闭兼容模式
+syntax enable       &quot; 语法高亮
+&quot; 开启文件类型侦测
+filetype on
+&quot; 根据侦测到的不同类型加载对应的插件
+filetype plugin on  &quot; 文件类型插件
+filetype indent on
+set autoindent
+autocmd BufEnter * :syntax sync fromstart
+&quot; 设置背景透明
+hi Normal ctermfg=252 ctermbg=none
+
+set nu              &quot; 显示行号
+set showcmd         &quot; 显示命令
+set lz              &quot; 当运行宏时，在命令执行完成之前，不重绘屏幕
+set hid             &quot; 可以在没有保存的情况下切换buffer
+set backspace=eol,start,indent
+set whichwrap+=&lt;,&gt;,h,l &quot; 退格键和方向键可以换行
+set incsearch       &quot; 增量式搜索
+set hlsearch        &quot; 搜索时，高亮显示匹配结果。
+&quot; set ignorecase      &quot; 搜索时忽略大小写
+set magic           &quot; 额，自己:h magic吧，一行很难解释
+set showmatch       &quot; 光标遇到圆括号、方括号、大括号时，自动高亮对应的另一个圆括号、方括号和大括号。
+set nowb
+set nobackup
+set noswapfile      &quot; 不使用swp文件，注意，错误退出后无法恢复
+set lbr             &quot; 在breakat字符处而不是最后一个字符处断行
+set ai              &quot; 自动缩进
+set si              &quot; 智能缩进
+set cindent         &quot; C/C++风格缩进
+
+&quot;命令模式下，底部操作指令按下 Tab 键自动补全。第一次按下 Tab，会显示所有匹配的操作指令的清单；第二次按下 Tab，会依次选择各个指令。
+set wildmenu
+set wildmode=longest:list,full
+
+set nofen
+set fdl=10
+&quot; tab转化为4个字符
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+&quot; 不使用beep或flash
+set vb t_vb=
+&quot;colorscheme elflord
+&quot; 启用256色
+set t_Co=256
+set t_ut=n
+
+set history=50  &quot; vim记住的历史操作的数量，默认的是20
+set autoread     &quot; 当文件在外部被修改时，自动重新读取
+set mouse=a      &quot; 在所有模式下都允许使用鼠标，还可以是n,v,i,c等
+
+&quot; 光标所在的当前行高亮
+set cursorline
+&quot; highlight CursorLine   cterm=NONE ctermbg=gray ctermfg=black guibg=NONE guifg=NONE
+&quot; highlight CocHighlightText cterm=NONE ctermbg=yellow ctermfg=black guibg=NONE guifg=NONE
+
+
+&quot; 插件窗口的宽度，如TagList,NERD_tree等，自己设置
+let s:PlugWinSize = 28
+
+&quot; 自动完成括号和引号
+inoremap &lt;leader&gt;1 ()&lt;esc&gt;:let leavechar=&quot;)&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;2 []&lt;esc&gt;:let leavechar=&quot;]&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;3 {}&lt;esc&gt;:let leavechar=&quot;}&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;4 {&lt;esc&gt;o}&lt;esc&gt;:let leavechar=&quot;}&quot;&lt;cr&gt;O
+inoremap &lt;leader&gt;q ''&lt;esc&gt;:let leavechar=&quot;'&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;w &quot;&quot;&lt;esc&gt;:let leavechar='&quot;'&lt;cr&gt;i
+
+&quot; 用 */# 向 前/后 搜索光标下的单词
+vnoremap &lt;silent&gt; * :call VisualSearch('f')&lt;CR&gt;
+vnoremap &lt;silent&gt; # :call VisualSearch('b')&lt;CR&gt;
+
+&quot; 用c-j,k在buffer之间切换
+nn &lt;C-J&gt; :bn&lt;cr&gt;
+nn &lt;C-K&gt; :bp&lt;cr&gt;
+nn &lt;C-H&gt; :b1&lt;cr&gt;
+
+&quot; ==================================================
+&quot;                快捷键运行脚本
+&quot; ==================================================
+&quot; &lt;F5&gt;运行python3脚本
+map &lt;F5&gt; :call RunPython()&lt;CR&gt;
+func! RunPython()
+    exec &quot;W&quot;
+    if &amp;filetype == 'python'
+        exec &quot;!time python3 %&quot;
+    endif
+endfunc
+</code></pre>
+<h1 id="配置cc开发环境"><a class="header" href="#配置cc开发环境">配置C/C++开发环境</a></h1>
+<ol>
+<li>安装基础包</li>
+</ol>
+<pre><code class="language-shell">yay -S nodejs npm vim 
+</code></pre>
+<ol start="2">
+<li>如果使用makefile而不是cmake,还需要安装</li>
+</ol>
+<pre><code class="language-shell">yay -S bear
+</code></pre>
+<p>每次使用<code>bear make</code>生成配置文件
+3. 安装插件管理，强烈推荐<code>vim-plug</code></p>
+<pre><code class="language-shell">yay -S vim-plug
+</code></pre>
+<p>或</p>
+<pre><code class="language-shell">curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+</code></pre>
+<ol start="4">
+<li>编写<code>.vimrc</code></li>
+</ol>
+<pre><code class="language-vim">&quot; 以下每个插件，都可使用https://github.com/***查看其官方介绍
+call plug#begin('~/.vim/plugged')
+Plug 'Yggdroot/indentLine'                          &quot;显示对齐线
+Plug 'scrooloose/nerdtree'                          &quot;显示文件目录
+Plug 'scrooloose/nerdcommenter'                     &quot;用于快速高效注释代码
+Plug 'neoclide/coc.nvim', {'branch': 'release'}     &quot;基于nodejs的智能补全插件，非常强大
+Plug 'vim-airline/vim-airline'                      &quot;友好的显示状态栏
+Plug 'peterhoeg/vim-qml'                            &quot;qml高亮
+Plug 'octol/vim-cpp-enhanced-highlight'             &quot;cpp高亮
+Plug 'ryanoasis/vim-devicons'                       &quot;显示文件类型图标，系统需安装图标字体：yay -S nerd-fonts-complete
+Plug 'junegunn/fzf.vim'                             &quot;文件搜索工具，yay -S fzf the_silver_searcher
+call plug#end()
+
+set nocompatible    &quot; 关闭兼容模式
+syntax on       &quot; 语法高亮
+&quot; 开启文件类型侦测
+filetype on
+&quot; 根据侦测到的不同类型加载对应的插件
+filetype plugin on  &quot; 文件类型插件
+filetype indent on
+set autoindent
+autocmd BufEnter * :syntax sync fromstart
+&quot; 设置背景透明
+hi Normal ctermfg=252 ctermbg=none
+
+set nu              &quot; 显示行号
+set showcmd         &quot; 显示命令
+set lz              &quot; 当运行宏时，在命令执行完成之前，不重绘屏幕
+set hid             &quot; 可以在没有保存的情况下切换buffer
+set backspace=eol,start,indent
+set whichwrap+=&lt;,&gt;,h,l &quot; 退格键和方向键可以换行
+set incsearch       &quot; 增量式搜索
+set hlsearch        &quot; 搜索时，高亮显示匹配结果。
+&quot; set ignorecase      &quot; 搜索时忽略大小写
+set magic           &quot; 额，自己:h magic吧，一行很难解释
+set showmatch       &quot; 光标遇到圆括号、方括号、大括号时，自动高亮对应的另一个圆括号、方括号和大括号。
+set nowb
+set noswapfile      &quot; 不使用swp文件，注意，错误退出后无法恢复
+set lbr             &quot; 在breakat字符处而不是最后一个字符处断行
+set ai              &quot; 自动缩进
+set si              &quot; 智能缩进
+set cindent         &quot; C/C++风格缩进
+
+&quot;命令模式下，底部操作指令按下 Tab 键自动补全。第一次按下 Tab，会显示所有匹配的操作指令的清单；第二次按下 Tab，会依次选择各个指令。
+set wildmenu
+set wildmode=longest:list,full
+
+set nofen
+set fdl=10
+&quot; tab转化为4个字符
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+&quot; 不使用beep或flash
+set vb t_vb=
+&quot;set background=dark
+&quot;colorscheme elflord
+&quot; 启用256色
+set t_Co=256
+set t_ut=n
+
+set history=50  &quot; vim记住的历史操作的数量，默认的是20
+set autoread     &quot; 当文件在外部被修改时，自动重新读取
+set mouse=a      &quot; 在所有模式下都允许使用鼠标，还可以是n,v,i,c等
+
+&quot; 光标所在的当前行高亮
+set cursorline
+&quot; highlight CursorLine   cterm=NONE ctermbg=gray ctermfg=black guibg=NONE guifg=NONE
+&quot; highlight CocHighlightText cterm=NONE ctermbg=yellow ctermfg=black guibg=NONE guifg=NONE
+
+&quot; 高亮多余的空白字符及Tab
+highlight RedundantSpaces ctermbg=red guibg=red
+match RedundantSpaces /\s\+$\| \+\ze\t\|\t/
+
+&quot; 插件窗口的宽度，如TagList,NERD_tree等，自己设置
+let s:PlugWinSize = 28
+
+&quot; 自动完成括号和引号
+inoremap &lt;leader&gt;1 ()&lt;esc&gt;:let leavechar=&quot;)&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;2 []&lt;esc&gt;:let leavechar=&quot;]&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;3 {}&lt;esc&gt;:let leavechar=&quot;}&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;4 {&lt;esc&gt;o}&lt;esc&gt;:let leavechar=&quot;}&quot;&lt;cr&gt;O
+inoremap &lt;leader&gt;q ''&lt;esc&gt;:let leavechar=&quot;'&quot;&lt;cr&gt;i
+inoremap &lt;leader&gt;w &quot;&quot;&lt;esc&gt;:let leavechar='&quot;'&lt;cr&gt;i
+
+&quot; 用 */# 向 前/后 搜索光标下的单词
+vnoremap &lt;silent&gt; * :call VisualSearch('f')&lt;CR&gt;
+vnoremap &lt;silent&gt; # :call VisualSearch('b')&lt;CR&gt;
+
+&quot; 用c-j,k在buffer之间切换
+nn &lt;C-J&gt; :bn&lt;cr&gt;
+nn &lt;C-K&gt; :bp&lt;cr&gt;
+nn &lt;C-H&gt; :b1&lt;cr&gt;
+
+let mapleader=','
+
+&quot;----------------------------------------------------
+&quot;                    indentLine
+&quot;----------------------------------------------------
+let g:indentLine_enabled = 1
+let g:indent_guides_guide_size            = 1  &quot; 指定对齐线的尺寸
+let g:indent_guides_start_level           = 2  &quot; 从第二层开始可视化显示缩进
+
+&quot;----------------------------------------------------
+&quot;                    nerdtree
+&quot;----------------------------------------------------
+&quot; 进入 vim 时自动开启 NERDTree
+autocmd VimEnter * NERDTree | wincmd p
+&quot; 若关闭某个 buff 后 NERDTree 是仅剩的最后一个 buff，则自动关闭 NERDTree
+autocmd BufEnter * if tabpagenr('$') == 1 &amp;&amp; winnr('$') == 1 &amp;&amp; exists('b:NERDTree') &amp;&amp; b:NERDTree.isTabTree() | quit | endif
+&quot; 使用PlugWinSize
+let NERDTreeWinSize = s:PlugWinSize
+&quot; 使用 Ctrl+n 快捷键打开或关闭 NERDTree
+nnoremap &lt;C-n&gt; :NERDTreeToggle&lt;CR&gt;
+
+
+&quot;----------------------------------------------------
+&quot;                    fzf
+&quot;----------------------------------------------------
+&quot;fzf快捷键 ctrl+p
+nnoremap &lt;silent&gt; &lt;C-p&gt; :Files&lt;CR&gt;
+nnoremap &lt;silent&gt; &lt;C-k&gt; :Buffers&lt;CR&gt;
+nnoremap &lt;silent&gt; &lt;C-a&gt; :Ag&lt;CR&gt;
+&quot; 若需要设置过滤路径：
+&quot; yay -S fd
+&quot; vim ~/.zshrc
+&quot; export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+&quot; vim ~/.config/fd/ignore
+&quot; 输入要过滤的文件或文件夹，如：
+&quot; build
+&quot; build-Release
+
+&quot;----------------------------------------------------
+&quot;                    coc.nvim
+&quot;----------------------------------------------------
+&quot; Set internal encoding of vim, not needed on neovim, since coc.nvim using some
+&quot; unicode characters in the file autoload/float.vim
+set encoding=utf-8
+
+&quot; TextEdit might fail if hidden is not set.
+set hidden
+
+&quot; Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+&quot; Give more space for displaying messages.
+set cmdheight=2
+
+&quot; Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+&quot; delays and poor user experience.
+set updatetime=300
+
+&quot; Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+&quot; Always show the signcolumn, otherwise it would shift the text each time
+&quot; diagnostics appear/become resolved.
+if has(&quot;nvim-0.5.0&quot;) || has(&quot;patch-8.1.1564&quot;)
+  &quot; Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+&quot; Use tab for trigger completion with characters ahead and navigate.
+&quot; NOTE: Use command ':verbose imap &lt;tab&gt;' to make sure tab is not mapped by
+&quot; other plugin before putting this into your config.
+inoremap &lt;silent&gt;&lt;expr&gt; &lt;TAB&gt;
+      \ pumvisible() ? &quot;\&lt;C-n&gt;&quot; :
+      \ CheckBackspace() ? &quot;\&lt;TAB&gt;&quot; :
+      \ coc#refresh()
+inoremap &lt;expr&gt;&lt;S-TAB&gt; pumvisible() ? &quot;\&lt;C-p&gt;&quot; : &quot;\&lt;C-h&gt;&quot;
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+&quot; Use &lt;c-space&gt; to trigger completion.
+if has('nvim')
+  inoremap &lt;silent&gt;&lt;expr&gt; &lt;c-space&gt; coc#refresh()
+else
+  inoremap &lt;silent&gt;&lt;expr&gt; &lt;c-@&gt; coc#refresh()
+endif
+
+&quot; Make &lt;CR&gt; auto-select the first completion item and notify coc.nvim to
+&quot; format on enter, &lt;cr&gt; could be remapped by other vim plugin
+inoremap &lt;silent&gt;&lt;expr&gt; &lt;cr&gt; pumvisible() ? coc#_select_confirm()
+                              \: &quot;\&lt;C-g&gt;u\&lt;CR&gt;\&lt;c-r&gt;=coc#on_enter()\&lt;CR&gt;&quot;
+
+&quot; Use `[g` and `]g` to navigate diagnostics
+&quot; Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap &lt;silent&gt; [g &lt;Plug&gt;(coc-diagnostic-prev)
+nmap &lt;silent&gt; ]g &lt;Plug&gt;(coc-diagnostic-next)
+
+&quot; GoTo code navigation.
+nmap &lt;silent&gt; gd &lt;Plug&gt;(coc-definition)
+nmap &lt;silent&gt; gy &lt;Plug&gt;(coc-type-definition)
+nmap &lt;silent&gt; gi &lt;Plug&gt;(coc-implementation)
+nmap &lt;silent&gt; gr &lt;Plug&gt;(coc-references)
+
+&quot; Use K to show documentation in preview window.
+nnoremap &lt;silent&gt; K :call ShowDocumentation()&lt;CR&gt;
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+&quot; Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+&quot; Symbol renaming.
+nmap &lt;leader&gt;rn &lt;Plug&gt;(coc-rename)
+
+&quot; Formatting selected code.
+xmap &lt;leader&gt;f  &lt;Plug&gt;(coc-format-selected)
+nmap &lt;leader&gt;f  &lt;Plug&gt;(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  &quot; Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  &quot; Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+&quot; Applying codeAction to the selected region.
+&quot; Example: `&lt;leader&gt;aap` for current paragraph
+xmap &lt;leader&gt;a  &lt;Plug&gt;(coc-codeaction-selected)
+nmap &lt;leader&gt;a  &lt;Plug&gt;(coc-codeaction-selected)
+
+&quot; Remap keys for applying codeAction to the current buffer.
+nmap &lt;leader&gt;ac  &lt;Plug&gt;(coc-codeaction)
+&quot; Apply AutoFix to problem on the current line.
+nmap &lt;leader&gt;qf  &lt;Plug&gt;(coc-fix-current)
+
+&quot; Run the Code Lens action on the current line.
+nmap &lt;leader&gt;cl  &lt;Plug&gt;(coc-codelens-action)
+
+&quot; Map function and class text objects
+&quot; NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if &lt;Plug&gt;(coc-funcobj-i)
+omap if &lt;Plug&gt;(coc-funcobj-i)
+xmap af &lt;Plug&gt;(coc-funcobj-a)
+omap af &lt;Plug&gt;(coc-funcobj-a)
+xmap ic &lt;Plug&gt;(coc-classobj-i)
+omap ic &lt;Plug&gt;(coc-classobj-i)
+xmap ac &lt;Plug&gt;(coc-classobj-a)
+omap ac &lt;Plug&gt;(coc-classobj-a)
+
+&quot; Remap &lt;C-f&gt; and &lt;C-b&gt; for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-f&gt; coc#float#has_scroll() ? coc#float#scroll(1) : &quot;\&lt;C-f&gt;&quot;
+  nnoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-b&gt; coc#float#has_scroll() ? coc#float#scroll(0) : &quot;\&lt;C-b&gt;&quot;
+  inoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-f&gt; coc#float#has_scroll() ? &quot;\&lt;c-r&gt;=coc#float#scroll(1)\&lt;cr&gt;&quot; : &quot;\&lt;Right&gt;&quot;
+  inoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-b&gt; coc#float#has_scroll() ? &quot;\&lt;c-r&gt;=coc#float#scroll(0)\&lt;cr&gt;&quot; : &quot;\&lt;Left&gt;&quot;
+  vnoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-f&gt; coc#float#has_scroll() ? coc#float#scroll(1) : &quot;\&lt;C-f&gt;&quot;
+  vnoremap &lt;silent&gt;&lt;nowait&gt;&lt;expr&gt; &lt;C-b&gt; coc#float#has_scroll() ? coc#float#scroll(0) : &quot;\&lt;C-b&gt;&quot;
+endif
+
+&quot; Use CTRL-S for selections ranges.
+&quot; Requires 'textDocument/selectionRange' support of language server.
+nmap &lt;silent&gt; &lt;C-s&gt; &lt;Plug&gt;(coc-range-select)
+xmap &lt;silent&gt; &lt;C-s&gt; &lt;Plug&gt;(coc-range-select)
+
+&quot; Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+
+&quot; Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', &lt;f-args&gt;)
+
+&quot; Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+&quot; Add (Neo)Vim's native statusline support.
+&quot; NOTE: Please see `:h coc-status` for integrations with external plugins that
+&quot; provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+&quot; Mappings for CoCList
+&quot; Show all diagnostics.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;a  :&lt;C-u&gt;CocList diagnostics&lt;cr&gt;
+&quot; Manage extensions.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;e  :&lt;C-u&gt;CocList extensions&lt;cr&gt;
+&quot; Show commands.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;c  :&lt;C-u&gt;CocList commands&lt;cr&gt;
+&quot; Find symbol of current document.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;o  :&lt;C-u&gt;CocList outline&lt;cr&gt;
+&quot; Search workspace symbols.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;s  :&lt;C-u&gt;CocList -I symbols&lt;cr&gt;
+&quot; Do default action for next item.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;j  :&lt;C-u&gt;CocNext&lt;CR&gt;
+&quot; Do default action for previous item.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;k  :&lt;C-u&gt;CocPrev&lt;CR&gt;
+&quot; Resume latest coc list.
+nnoremap &lt;silent&gt;&lt;nowait&gt; &lt;space&gt;p  :&lt;C-u&gt;CocListResume&lt;CR&gt;
+
+&quot;----------------------------------------------------
+&quot;               vim-cpp-enhanced-highlight
+&quot;----------------------------------------------------
+&quot; 默认情况下禁用类范围的突出显示。 启用设置
+let g:cpp_class_scope_highlight = 1
+&quot; 默认情况下禁用成员变量的突出显示。 启用设置 
+let g:cpp_member_variable_highlight = 1
+&quot; 默认情况下，声明中类名的突出显示是禁用的。 启用设置 
+let g:cpp_class_decl_highlight = 1
+&quot; 默认情况下禁用 POSIX 函数的突出显示。 启用设置
+let g:cpp_posix_standard = 1
+&quot; 可以突出显示模板功能
+let g:cpp_experimental_template_highlight = 1
+&quot; 启用库概念的突出显示
+let g:cpp_concepts_highlight = 1
+</code></pre>
+<p>编写完成后保存，然后执行：</p>
+<pre><code class="language-vim">:PlugInstall
+</code></pre>
+<p>等待插件安装完成，安装coc插件：</p>
+<pre><code class="language-vim">:CocInstall coc-json coc-clangd
+</code></pre>
+<p>装完之后使用方式，首先cd到项目目录：</p>
+<pre><code class="language-shell">mkdir build
+cd build
+cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+</code></pre>
+<p>然后使用vim打开项目文件即可正常编辑，可以愉快的享受智能提示及语法高亮了！</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vnc服务搭建方法及使用"><a class="header" href="#vnc服务搭建方法及使用">vnc服务搭建方法及使用</a></h1>
+<h2 id="简介-1"><a class="header" href="#简介-1">简介</a></h2>
+<p>在日常测试时，需要在服务器上测试图形化的桌面系统功能。为了更方便开展测试工作使用远程桌面操作是非常恰当的选择。</p>
+<h2 id="服务器上安装x11vnc"><a class="header" href="#服务器上安装x11vnc">服务器上安装x11vnc</a></h2>
+<h3 id="首先要安装x11vnc包debian系使用下面命令进行安装"><a class="header" href="#首先要安装x11vnc包debian系使用下面命令进行安装">首先要安装<code>x11vnc</code>包，debian系使用下面命令进行安装：</a></h3>
+<pre><code>sudo apt install x11vnc
+</code></pre>
+<p>archlinux可以使用pacman或yay进行安装：</p>
+<pre><code>sudo pacman -S x11vnc
+</code></pre>
+<h3 id="设置并存储vnc这里设置为deepin需要什么密码只需要把deepin改为对应的字符串就行"><a class="header" href="#设置并存储vnc这里设置为deepin需要什么密码只需要把deepin改为对应的字符串就行">设置并存储vnc，这里设置为<code>deepin</code>，需要什么密码只需要把<code>deepin</code>改为对应的字符串就行。</a></h3>
+<pre><code>sudo x11vnc -storepasswd deepin /etc/x11vnc.pass
+</code></pre>
+<h3 id="启动-x11vnc服务端"><a class="header" href="#启动-x11vnc服务端">启动 x11vnc服务端</a></h3>
+<pre><code>sudo x11vnc -display :0 -auth /var/run/lightdm/root/:0 -forever -bg -o /var/log/x11vnc.log -rfbauth /etc/x11vnc.pass -shared -noxdamage -xrandr &quot;resize&quot; -rfbport 5900
+</code></pre>
+<h2 id="客户端安装tigervnc-viewer"><a class="header" href="#客户端安装tigervnc-viewer">客户端安装tigervnc-viewer</a></h2>
+<p>debian系安装：</p>
+<pre><code>sudo apt-get install tigervnc-viewer -y
+</code></pre>
+<p>archlinux安装：</p>
+<pre><code>sudo pacman -S tigervnc
+</code></pre>
+<p>选择VNC查看器，直接输入服务端的IP，输入前面服务端设置的连接密码进行链接</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vscode-使用小技巧"><a class="header" href="#vscode-使用小技巧">vscode 使用小技巧</a></h1>
+<h2 id="vscode中go开发环境配置"><a class="header" href="#vscode中go开发环境配置">vscode中go开发环境配置</a></h2>
+<h3 id="安装插件"><a class="header" href="#安装插件">安装插件</a></h3>
+<p>首先<code>go</code>插件必须要安装上，安装完成后打开go文件，会提示安装<code>gopls</code>，但是此时不一定可以安装，因为是国内环境，懂得都懂。</p>
+<h3 id="安装gopls和go-outline"><a class="header" href="#安装gopls和go-outline">安装gopls和go-outline</a></h3>
+<p>正确的安装方式是，首先配置go的代理：</p>
+<pre><code>go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+</code></pre>
+<p>然后就可以简单的使用<code>go install</code>进行命令进行安装啦：</p>
+<pre><code>go install golang.org/x/tools/gopls@latest
+go install github.com/ramya-rao-a/go-outline@latest
+</code></pre>
+<p>最后，重新打开vscode,是不是发现智能提示已经有了。</p>
+<h3 id="配置调试工具"><a class="header" href="#配置调试工具">配置调试工具</a></h3>
+<p>在打开的go文件中按<code>F5</code>调试，会提示安装dlv-dap工具，点击<code>install</code>进行安装，安装完成后，再次按<code>F5</code>会有一行错误提示：</p>
+<pre><code>go.mod file not found in current directory or any parent directory; see 'go help modules'
+</code></pre>
+<p>此时，在终端中输入：</p>
+<pre><code>go env -w GO111MODULE=auto
+</code></pre>
+<p>然后再次按<code>F5</code>启动调试，发现程序可以正常运行了！</p>
+<h2 id="vscode-配置-plantuml"><a class="header" href="#vscode-配置-plantuml">vscode 配置 plantuml</a></h2>
+<ol>
+<li>安装 plantuml 和 graphviz
+debian:</li>
+</ol>
+<pre><code class="language-shell">sudo apt install plantuml graphviz
+</code></pre>
+<p>archlinux</p>
+<pre><code class="language-shell">sudo pacman -S plantuml graphviz
+</code></pre>
+<ol start="3">
+<li>vscode 安装 plantuml 插件</li>
+</ol>
+<h2 id="vscodium和code-oss使用vscode扩展"><a class="header" href="#vscodium和code-oss使用vscode扩展">VSCodium和Code-OSS使用vscode扩展</a></h2>
+<ol>
+<li>找到product.json文件：</li>
+</ol>
+<pre><code>debian: /usr/share/codium/resources/app/product.json
+archlinux: /usr/lib/code/product.json
+</code></pre>
+<ol start="2">
+<li>修改&quot;extensionsGallery&quot;字段：</li>
+</ol>
+<pre><code class="language-json">&quot;extensionsGallery&quot;:{
+    &quot;serviceUrl&quot;:&quot;https://marketplace.visualstudio.com/_apis/public/gallery&quot;,
+    &quot;cacheUrl&quot;:&quot;https://vscode.blob.core.windows.net/gallery/index&quot;,
+    &quot;itemUrl&quot;: &quot;https://marketplace.visualstudio.com/items&quot;
+}
+</code></pre>
+<ol start="3">
+<li>重启code即可</li>
+</ol>
+<h2 id="vscode使用gitee同步配置"><a class="header" href="#vscode使用gitee同步配置">vscode使用gitee同步配置</a></h2>
+<ol>
+<li>在网页上登陆gitee后，点击右上角“发布代码片段”</li>
+<li>随便填写信息，如“vscode clound sync”，点击发布</li>
+<li>发布后跳转的浏览器地址最后一段就是gistID,若遗忘，则在个人主页后添加<code>/codes</code>就可以进入代码片段管理页面了</li>
+<li>点击头像，进入设置页面，找到私人令牌，创建私人令牌</li>
+<li>安全起见，建议只勾选<code>user_info</code>和<code>gists</code>权限</li>
+<li>提交后会弹出消息框，务必记录该私人令牌，因为它只会出现一次，如我的就是：</li>
+</ol>
+<pre><code>ae82d00e89e159112b1bacce8dd3c8a8
+</code></pre>
+<ol start="7">
+<li>打开vscode，按下<code>Ctrl+Shift+P</code>，输入<code>settings.json</code>打开设置，并填入以下内容：</li>
+</ol>
+<pre><code>&quot;gitee.gist&quot;:&quot;将双引号里面的内容替换成前面获取到的gistID&quot;,
+&quot;gitee.access_token&quot;:&quot;将双引号里面的内容替换成你的私人令牌&quot;
+</code></pre>
+<ol start="8">
+<li>配置好后，可以使用<code>upload setting</code>命令上传设置，<code>download setting</code>命令下载配置</li>
+</ol>
 
                     </main>
 

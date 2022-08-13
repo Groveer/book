@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html lang="cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>qemu - Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">说明</a></li><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">1.</strong> Linux</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../linux/auto-login.html"><strong aria-hidden="true">1.1.</strong> 自动登录</a></li><li class="chapter-item expanded "><a href="../linux/zram.html"><strong aria-hidden="true">1.2.</strong> zram交换空间</a></li></ol></li><li class="chapter-item expanded "><a href="../archlinux/index.html"><strong aria-hidden="true">2.</strong> Arch Linux</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../archlinux/install.html"><strong aria-hidden="true">2.1.</strong> 系统安装</a></li><li class="chapter-item expanded "><a href="../archlinux/config.html"><strong aria-hidden="true">2.2.</strong> 系统配置</a></li><li class="chapter-item expanded "><a href="../archlinux/install-nvidia.html"><strong aria-hidden="true">2.3.</strong> N卡驱动安装</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Deepin</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../deepin/repair-system.html"><strong aria-hidden="true">3.1.</strong> 系统修复</a></li></ol></li><li class="chapter-item expanded "><a href="../cmake/index.html"><strong aria-hidden="true">4.</strong> CMake</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cmake/basic.html"><strong aria-hidden="true">4.1.</strong> 基础用法</a></li><li class="chapter-item expanded "><a href="../cmake/advanced.html"><strong aria-hidden="true">4.2.</strong> 高级用法</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Qt</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../qt/tips.html"><strong aria-hidden="true">5.1.</strong> 小技巧</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> 工具</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tools/git.html"><strong aria-hidden="true">6.1.</strong> git</a></li><li class="chapter-item expanded "><a href="../tools/qemu.html" class="active"><strong aria-hidden="true">6.2.</strong> qemu</a></li><li class="chapter-item expanded "><a href="../tools/vim.html"><strong aria-hidden="true">6.3.</strong> vim</a></li><li class="chapter-item expanded "><a href="../tools/vnc.html"><strong aria-hidden="true">6.4.</strong> vnc</a></li><li class="chapter-item expanded "><a href="../tools/vscode.html"><strong aria-hidden="true">6.5.</strong> vscode</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/Groveer/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="如何优雅的使用qemu-kvm"><a class="header" href="#如何优雅的使用qemu-kvm">如何优雅的使用qemu-kvm</a></h1>
+<h2 id="为何要用qemu-kvm"><a class="header" href="#为何要用qemu-kvm">为何要用qemu-kvm</a></h2>
+<p>作为开发人员，往往需要在各种环境中进行调试，由于硬件资源的限制，调试环境的配置，往往需要花费大量的时间，本篇文章旨在使用qemu-kvm来配置各种调试环境，并且合理使用快照功能来实现各个环境的切换。</p>
+<h2 id="名词解释"><a class="header" href="#名词解释">名词解释</a></h2>
+<ol>
+<li>宿主机：通常为用户使用的机器，通常称为主机</li>
+<li>虚拟机：顾名思义，就是虚拟机</li>
+</ol>
+<h2 id="虚拟机的安装"><a class="header" href="#虚拟机的安装">虚拟机的安装</a></h2>
+<p>本篇文章希望读者可以理解qemu的运行原理，故不会介绍gui相关的操作，有兴趣的同学可以自行搜索相关知识。虚拟机的安装很简单，一般只要安装<code>qemu-kvm</code>这个包即可，<code>Archlinux</code>最新版应该是<code>qemu</code>包</p>
+<h2 id="创建硬盘镜像"><a class="header" href="#创建硬盘镜像">创建硬盘镜像</a></h2>
+<ol>
+<li>硬盘镜像是一个文件，存储虚拟机硬盘上的内容。</li>
+<li>一种硬盘镜像可能是<code>raw</code>镜像, 和主机上看到的内容一模一样，并且将始终使用主机上的硬盘驱动器的全部容量。此方法提供的I/O开销最小，但可能会浪费大量空间，因为虚拟机上未使用的空间无法在主机上使用。</li>
+<li>另外一种方式是<code>qcow2</code>格式，仅当主机实际写入内容的时候，才会分配镜像空间。对虚拟机来说，硬盘大小表现为完整大小，即使它可能仅占用主机系统上的非常小的空间。此映像格式还支持QEMU快照功能。但是，使用此格式可能会影响性能。</li>
+<li>在创建硬盘镜像之前，需要准备一个目录存放硬盘镜像文件，一般为用户<code>home</code>目录。需要注意的是，如果主机使用的是<code>btrfs</code>文件系统，那么需要关闭其写时复制功能：<code>chattr +C dir</code>。</li>
+<li>准备好目录后，可以在当前目录执行：<code>qemu-img create -f qcow2 image_file 80G</code>来创建硬盘镜像，也可以使用<code>-f raw</code>来创建raw格式的硬盘镜像，但是该格式不支持快照功能。</li>
+</ol>
+<h2 id="安装系统"><a class="header" href="#安装系统">安装系统</a></h2>
+<ol>
+<li>准备好安装介质，一般是各个操作系统发行版发布的iso文件。</li>
+<li>第一次启动模拟器，为了在磁盘镜像上安装操作系统，必须同时将磁盘镜像与安装介质装载到虚拟机上，从安装介质中启动操作系统：<code>qemu-system-x86_64 -cdrom iso_image -boot menu=on -drive file=disk_image -m 4G -smp 4 -enable-kvm</code>。
+<ol>
+<li>-cdrom 参数指定安装介质。</li>
+<li>-boot 参数指定引导顺序，使用<code>menu=on</code>可以在虚拟机刚启动时按<code>esc</code>来手动选择启动顺序。</li>
+<li>-drive 参数指定硬盘镜像文件，该参数可以指定多个文件，但不同的文件有不同的用处，有兴趣的同学可以自行搜索相关资料。</li>
+<li>-m 参数指定虚拟机所使用的内存大小，可以自行调整，单位可以是M或G。</li>
+<li>-smp 参数指定虚拟机所使用的CPU个数，可以自行调整。</li>
+<li>-enable-kvm 参数使用kvm内核模块，如果不使用，虚拟机性能会非常差，如果开启失败，请检查bios设置中的虚拟机技术支持是否开启。</li>
+</ol>
+</li>
+<li>安装完成后，以后每次启动可以去掉<code>-cdrom</code>参数。</li>
+</ol>
+<h2 id="快照管理"><a class="header" href="#快照管理">快照管理</a></h2>
+<p>在虚拟机关机状态下，使用<code>qemu-img snapshot</code>进行快照管理，可以使用<code>qemu-img snapshot --help</code>查看帮助，注意只有qcow2才能使用快照功能。<br>
+1. <code>qemu-img snapshot -c Tag disk_image</code>在<code>disk_image</code>文件中创建名为<code>Tag</code>的快照。<br>
+2. <code>qemu-img snapshot -l disk_image</code>查看<code>disk_image</code>文件中的快照信息。<br>
+3. <code>qemu-img snapshot -a Tag disk_image</code>将<code>disk_image</code>还原到<code>Tag</code>时。<br>
+4. <code>qemu-img snapshot -d Tag disk_image</code>将<code>disk_image</code>文件中的<code>Tag</code>快照删除。<br></p>
+<h2 id="硬盘镜像扩展"><a class="header" href="#硬盘镜像扩展">硬盘镜像扩展</a></h2>
+<ol>
+<li>当硬盘镜像不够使用时，可以对其进行扩展：<code>qemu-img resize disk_image +/-10G</code>。</li>
+<li>在磁盘映像扩容后，必须使用虚拟机内部系统的分区工具对该镜像进行分区并格式化后才能真正开始使用新空间。在收缩磁盘映像时，必须首先使用虚拟机内部系统的分区工具减少分该分区的大小，然后相应地收缩磁盘映像，否则收缩磁盘映像将导致数据丢失！</li>
+<li><code>注意</code>：调整包含NTFS引导文件系统的镜像将无法启动已安装的操作系统，推荐在操作之前进行备份。</li>
+</ol>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>使用上述的技巧可以灵活的使用虚拟机，并且可以将<code>qcow2</code>文件放置在移动硬盘中进行携带，那么一个硬盘镜像文件几乎可以满足各种调试场景的需求了。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tools/git.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../tools/vim.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tools/git.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../tools/vim.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
