@@ -173,9 +173,9 @@ yay -S go
 ```
 2. 选择一个go工作目录，以`～/Develop/go`为例，新建三个目录：
 ```shell
-mkdir -p ~/Develop/{src,bin.pkg}
+mkdir -p ~/Develop/go/{src,bin,pkg}
 ```
-3. 配置环境变量`~/bash_profile`：
+3. 配置环境变量`~/.bash_profile`，zsh环境为`~/.zprofile`：
 ```shell
 export GOROOT=/usr/lib/go
 export GOPATH=~/Develop/go		   # 这两行你需要
