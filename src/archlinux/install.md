@@ -116,7 +116,13 @@ swapon /dev/sda3
 ## 配置 pacman mirror
 
 一般来说，不需要进行修改，如果发现下载速度很慢，可以修改其中顺序或加入[中国节点](https://wiki.archlinux.org/title/Mirrors_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%B8%AD%E5%9B%BD)的地址<br>
-`vim /etc/pacman.d/mirrorlist`
+```
+vim /etc/pacman.d/mirrorlist`
+```
+或直接使用`reflector`对源速度进行排序：
+```
+reflector --country China --protocol http --protocol https --latest 5 --save /etc/pacman.d/mirrorlist
+```
 
 ## 安装 Arch 和 Package Group
 
