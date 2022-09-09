@@ -286,8 +286,12 @@ mount /dev/sdb1 /mnt/home
 swapon /dev/sda3
 </code></pre>
 <h2 id="配置-pacman-mirror"><a class="header" href="#配置-pacman-mirror">配置 pacman mirror</a></h2>
-<p>一般来说，不需要进行修改，如果发现下载速度很慢，可以修改其中顺序或加入<a href="https://wiki.archlinux.org/title/Mirrors_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%B8%AD%E5%9B%BD">中国节点</a>的地址<br>
-<code>vim /etc/pacman.d/mirrorlist</code></p>
+<p>一般来说，不需要进行修改，如果发现下载速度很慢，可以修改其中顺序或加入<a href="https://wiki.archlinux.org/title/Mirrors_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E4%B8%AD%E5%9B%BD">中国节点</a>的地址<br></p>
+<pre><code>vim /etc/pacman.d/mirrorlist`
+</code></pre>
+<p>或直接使用<code>reflector</code>对源速度进行排序：</p>
+<pre><code>reflector --country China --protocol http --protocol https --latest 5 --save /etc/pacman.d/mirrorlist
+</code></pre>
 <h2 id="安装-arch-和-package-group"><a class="header" href="#安装-arch-和-package-group">安装 Arch 和 Package Group</a></h2>
 <p><code>pacstrap /mnt base base-devel linux linux-firmware</code></p>
 <h2 id="生成-fstab-文件"><a class="header" href="#生成-fstab-文件">生成 fstab 文件</a></h2>
