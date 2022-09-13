@@ -145,6 +145,12 @@
 <li>可能还会删除<code>-o '-p -- \\u'</code>（当前Arch安装中存在），因为这将启动登录名，USERNAME但仍要求输入密码。</li>
 <li>重新启动后，您将自动登录。</li>
 </ol>
+<h2 id="防止systemd更新导致配置被重置"><a class="header" href="#防止systemd更新导致配置被重置">防止systemd更新导致配置被重置</a></h2>
+<ol>
+<li>查看软链到哪个配置文件：<code>ls -l /etc/systemd/system/getty.target.wants/getty@tty1.service</code></li>
+<li>结果为：<code>/usr/lib/systemd/system/getty@.service</code></li>
+<li>修改文件属性：<code>sudo chattr +i /usr/lib/systemd/system/getty@.service</code></li>
+</ol>
 
                     </main>
 
