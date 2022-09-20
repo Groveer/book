@@ -21,6 +21,8 @@
 ---
 - [工具]()
   - [git](tools/git.md)
+  - [tig](tools/tig.md)
+  - [lazygit](tools/lazygit.md)
   - [qemu](tools/qemu.md)
   - [vim](tools/vim.md)
   - [vnc](tools/vnc.md)
