@@ -22,6 +22,7 @@
 - [工具]()
   - [git](tools/git.md)
   - [tig](tools/tig.md)
+  - [latex](tools/latex.md)
   - [lazygit](tools/lazygit.md)
   - [qemu](tools/qemu.md)
   - [vim](tools/vim.md)
