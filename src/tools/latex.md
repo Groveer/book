@@ -114,4 +114,4 @@ lualatex "-shell-escape" \
     {FILE_NEME}
 ```
 
-需要注意的是，Deepin 系统下的java版本可能比较老旧（/usr/share/plantuml/plantuml.jar），可在其他系统上拷贝较新的版本或使用本文章附件：[java](../resources/plantuml-1.2022.6.jar)
+需要注意的是，Deepin 系统下的 plantuml 版本可能比较老旧（/usr/share/plantuml/plantuml.jar），可在其他系统上拷贝较新的版本或使用本文章附件：[plantuml 包](../resources/plantuml-1.2022.6.jar)
