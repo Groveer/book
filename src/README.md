@@ -1,3 +1,4 @@
+**本网站已迁移到<https://groveer.github.io>，新的内容请移步新网站查看！**
 # Linux 笔记
 
 欢迎查阅 Linux 笔记，本笔记主要分为三类：
